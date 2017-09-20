@@ -24,12 +24,12 @@ public class StatisticsCollector {
         FileInputStream in = new FileInputStream(path);
         CompilationUnit cu = JavaParser.parse(in);
 
-        return getMethodsStatistics(cu);
+        return getMethodsStatistics(cu).withAst(getXmlAstString(cu));
     }
 
-    private static void getXmlAstString(CompilationUnit cu) {
+    private static String getXmlAstString(CompilationUnit cu) {
         String xmlString = new XmlPrinter(true).output(cu);
-   //     result.setAst(addTabulationToXml(xmlString));
+        return addTabulationToXml(xmlString);
     }
 
     private static String addTabulationToXml(String xmlString) {
