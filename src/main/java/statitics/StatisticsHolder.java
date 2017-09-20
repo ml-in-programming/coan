@@ -1,45 +1,24 @@
 package statitics;
 
-public class StatisticsHolder {
+import com.google.auto.value.AutoValue;
+
+@AutoValue
+public abstract class StatisticsHolder {
+
+    public static StatisticsHolder create(int methodsNumber, int totalChars, int totalLines) {
+        return new AutoValue_StatisticsHolder("stupid", methodsNumber, totalChars, totalLines);
+    }
 
     /** Visual representation of AST in xml-format. */
-    private String ast;
+    public abstract String getAst();
+
     /** Number of methods. */
-    private int methodsNumber;
+    public abstract int getMethodsNumber();
+
     /** Number of non-whitespace characters in methods. Includes methods' declarations. */
-    private int totalCharacters;
+    public abstract int getTotalCharacters();
+
     /** Number of lines in methods. Includes methods' declarations. */
-    private int totalLines;
+    public abstract int getTotalLines();
 
-    public String getAst() {
-        return ast;
-    }
-
-    public void setAst(String ast) {
-        this.ast = ast;
-    }
-
-    public int getMethodsNumber() {
-        return methodsNumber;
-    }
-
-    public void setMethodsNumber(int methodsNumber) {
-        this.methodsNumber = methodsNumber;
-    }
-
-    public int getTotalCharacters() {
-        return totalCharacters;
-    }
-
-    public void setTotalCharacters(int totalCharacters) {
-        this.totalCharacters = totalCharacters;
-    }
-
-    public int getTotalLines() {
-        return totalLines;
-    }
-
-    public void setTotalLines(int totalLines) {
-        this.totalLines = totalLines;
-    }
 }

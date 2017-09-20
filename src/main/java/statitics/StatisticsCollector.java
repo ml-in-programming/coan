@@ -19,20 +19,17 @@ public class StatisticsCollector {
      * @throws FileNotFoundException if there was no file at given path.
      */
     public static StatisticsHolder collectFromFile(String path) throws FileNotFoundException {
-        StatisticsHolder result = new StatisticsHolder();
 
         // Parse the file
         FileInputStream in = new FileInputStream(path);
         CompilationUnit cu = JavaParser.parse(in);
 
-        getXmlAstString(cu, result);
-        getMethodsStatistics(cu, result);
-        return result;
+        return getMethodsStatistics(cu);
     }
 
-    private static void getXmlAstString(CompilationUnit cu, StatisticsHolder result) {
+    private static void getXmlAstString(CompilationUnit cu) {
         String xmlString = new XmlPrinter(true).output(cu);
-        result.setAst(addTabulationToXml(xmlString));
+   //     result.setAst(addTabulationToXml(xmlString));
     }
 
     private static String addTabulationToXml(String xmlString) {
@@ -63,12 +60,10 @@ public class StatisticsCollector {
         }
     }
 
-    private static void getMethodsStatistics(CompilationUnit compilationUnit, StatisticsHolder result) {
-        MethodVisitor methodCounter = new MethodVisitor();
-        compilationUnit.accept(methodCounter,null);
-        result.setMethodsNumber(methodCounter.methodsNumber);
-        result.setTotalCharacters(methodCounter.totalCharacters);
-        result.setTotalLines(methodCounter.totalLines);
+    private static StatisticsHolder getMethodsStatistics(CompilationUnit compilationUnit) {
+        MethodVisitor visitor = new MethodVisitor();
+        compilationUnit.accept(visitor,null);
+        return StatisticsHolder.create(visitor.methodsNumber, visitor.totalCharacters, visitor.totalLines);
     }
 
     /** Visitor that collects statistics about methods. */
