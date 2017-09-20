@@ -24,9 +24,6 @@ dependencies {
 
 sourceSets {
     main {
-        java.srcDirs 'src/main/'
-    }
-    generated {
-        java.srcDir 'out/production/classes/generated'
+        java.srcDirs('src/main/', 'out/production/classes/generated')
     }
 }

@@ -21,4 +21,15 @@ public abstract class StatisticsHolder {
     /** Number of lines in methods. Includes methods' declarations. */
     public abstract int getTotalLines();
 
+    @AutoValue.Builder
+    public static abstract class Builder {
+
+        public abstract void setAst(String ast);
+
+        public abstract void setMethodsNumber(int methodsNumber);
+
+        public abstract void setTotalCharacters(int totalCharacters);
+
+        public abstract void setTotalLines(int totalLines);
+    }
 }
