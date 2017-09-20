@@ -5,14 +5,6 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class StatisticsHolder {
 
-    public static StatisticsHolder create(int methodsNumber, int totalChars, int totalLines) {
-        return create("", methodsNumber, totalChars, totalLines);
-    }
-
-    public static StatisticsHolder create(String ast, int methodsNumber, int totalChars, int totalLines) {
-        return new AutoValue_StatisticsHolder(ast, methodsNumber, totalChars, totalLines);
-    }
-
     /** Visual representation of AST in xml-format. */
     public abstract String getAst();
 
@@ -25,7 +17,44 @@ public abstract class StatisticsHolder {
     /** Number of lines in methods. Includes methods' declarations. */
     public abstract int getTotalLines();
 
-    public StatisticsHolder withAst(String ast) {
-        return create(ast, getMethodsNumber(), getTotalCharacters(), getTotalLines());
+    public abstract Builder toBuilder();
+
+    public static StatisticsHolder create() {
+        return new AutoValue_StatisticsHolder.Builder()
+                .setAst("")
+                .setMethodsNumber(0)
+                .setTotalCharacters(0)
+                .setTotalLines(0)
+                .build();
+    }
+
+    public StatisticsHolder addAst(String ast) {
+        return toBuilder().setAst(getAst() + "\n" + ast).build();
+    }
+
+    public StatisticsHolder addMethodsNumber(int methodsNumber) {
+        return toBuilder().setMethodsNumber(getMethodsNumber() + methodsNumber).build();
+    }
+
+    public StatisticsHolder addMethodsCharacters(int characters) {
+        return toBuilder().setTotalCharacters(getTotalCharacters() + characters).build();
+    }
+
+    public StatisticsHolder addMethodsLines(int lines) {
+        return toBuilder().setTotalLines(getTotalLines() + lines).build();
+    }
+
+    @AutoValue.Builder
+    static abstract class Builder {
+
+        public abstract Builder setAst(String ast);
+
+        public abstract Builder setMethodsNumber(int methodsNumber);
+
+        public abstract Builder setTotalCharacters(int totalCharacters);
+
+        public abstract Builder setTotalLines(int totalLines);
+
+        public abstract StatisticsHolder build();
     }
 }
