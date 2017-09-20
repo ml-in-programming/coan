@@ -5,12 +5,19 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.printer.XmlPrinter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class StatisticsCollector {
 
+    /**
+     * Collects information about the class stored in .java file.
+     * @param path path to the .java file.
+     * @return statistics about the class that is stored in that file.
+     * @throws FileNotFoundException if there was no file at given path.
+     */
     public static StatisticsHolder collectFromFile(String path) throws FileNotFoundException {
         StatisticsHolder result = new StatisticsHolder();
 
@@ -18,14 +25,14 @@ public class StatisticsCollector {
         FileInputStream in = new FileInputStream(path);
         CompilationUnit cu = JavaParser.parse(in);
 
-        result.setAst(getXmlAstString(cu));
-        result.setMethodsNumber(getMethodsNumber(cu));
+        getXmlAstString(cu, result);
+        getMethodsStatistics(cu, result);
         return result;
     }
 
-    private static String getXmlAstString(CompilationUnit cu) {
+    private static void getXmlAstString(CompilationUnit cu, StatisticsHolder result) {
         String xmlString = new XmlPrinter(true).output(cu);
-        return addTabulationToXml(xmlString);
+        result.setAst(addTabulationToXml(xmlString));
     }
 
     private static String addTabulationToXml(String xmlString) {
@@ -56,19 +63,26 @@ public class StatisticsCollector {
         }
     }
 
-    private static int getMethodsNumber(CompilationUnit compilationUnit) {
+    private static void getMethodsStatistics(CompilationUnit compilationUnit, StatisticsHolder result) {
         MethodVisitor methodCounter = new MethodVisitor();
         compilationUnit.accept(methodCounter,null);
-        return methodCounter.methodsNumber;
+        result.setMethodsNumber(methodCounter.methodsNumber);
+        result.setTotalCharacters(methodCounter.totalCharacters);
+        result.setTotalLines(methodCounter.totalLines);
     }
 
+    /** Visitor that collects statistics about methods. */
     private static class MethodVisitor extends VoidVisitorAdapter<Void> {
         private int methodsNumber = 0;
+        private int totalCharacters = 0;
+        private int totalLines = 0;
 
         @Override
-        public void visit(MethodDeclaration n, Void arg) {
+        public void visit(MethodDeclaration method, Void arg) {
             methodsNumber++;
-            super.visit(n, arg);
+            totalCharacters += method.toString().replaceAll("\\s+","").length();
+            totalLines += StringUtils.countMatches(method.toString(), "\n") + 1;
+            super.visit(method, arg);
         }
     }
 }
