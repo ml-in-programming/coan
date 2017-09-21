@@ -43,7 +43,6 @@ public class StatisticsCollector {
     }
 
     public static void collectFromFile(Path path, StatisticsHolder stats, Predicate<MethodDeclaration> filter) {
-        // Parse the file
         try {
             FileInputStream in = new FileInputStream(path.toString());
             CompilationUnit cu = JavaParser.parse(in);
