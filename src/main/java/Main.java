@@ -6,14 +6,21 @@ import java.nio.file.Paths;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        StatisticsHolder stats = StatisticsCollector.collectFromProject(Paths.get(System.getProperty("user.dir")));
-        System.out.println(stats.getAst());
+        StatisticsHolder stats = StatisticsCollector.collectFromProject(
+                Paths.get(System.getProperty("user.dir")),
+                m -> {
+                    String name = m.getNameAsString();
+                    return !name.startsWith("get") && !name.startsWith("set") && !name.startsWith("add");
+                });
+        //System.out.println(stats.getAst());
         System.out.println("Number of classes: " + stats.getClasses());
         System.out.println("Number of inner classes: " + stats.getInnerClasses());
         System.out.println("Number of interfaces: " + stats.getInterfaces());
         System.out.println("Number of methods: " + stats.getMethods());
         System.out.println("Total number of characters in methods: " + stats.getMethodsCharacters());
+        System.out.println("Average number of characters per method: " + (stats.getMethodsCharacters() / stats.getMethods()));
         System.out.println("Total number of lines in methods: " + stats.getMethodsLines());
+        System.out.println("Average number of lines per method: " + (stats.getMethodsLines() / stats.getMethods()));
         System.out.println("Number of fields: " + stats.getFields());
         System.out.println("Number of private fields: " + stats.getPrivateFields());
         System.out.println("Number of public fields: " + stats.getPublicFields());

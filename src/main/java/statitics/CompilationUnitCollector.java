@@ -10,14 +10,25 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.function.Predicate;
+
 public class CompilationUnitCollector {
 
-    public static void getStatistics(CompilationUnit compilationUnit, StatisticsHolder stats) {
-        compilationUnit.accept(new MethodVisitor(), stats);
+    public static void getStatistics(
+            CompilationUnit compilationUnit, StatisticsHolder stats, Predicate<MethodDeclaration> filter) {
+        compilationUnit.accept(new MethodVisitor(filter), stats);
     }
 
     /** Visitor that collects statistics about methods. */
     private static class MethodVisitor extends VoidVisitorAdapter<StatisticsHolder> {
+
+        private Predicate<MethodDeclaration> filter = m -> true;
+
+        private MethodVisitor() {}
+
+        private MethodVisitor(Predicate<MethodDeclaration> filter) {
+            this.filter = filter;
+        }
 
         @Override
         public void visit(ClassOrInterfaceDeclaration declaration, StatisticsHolder stats) {
@@ -33,6 +44,9 @@ public class CompilationUnitCollector {
 
         @Override
         public void visit(MethodDeclaration method, StatisticsHolder stats) {
+            if (!filter.test(method)) {
+                return;
+            }
             AstCollector.getAst(method, stats);
             stats.addMethodsNumber(1);
             stats.addMethodsCharacters(method.toString().replaceAll("\\s+","").length());
@@ -62,7 +76,7 @@ public class CompilationUnitCollector {
         }
 
         private static int getVariablesLength(NodeList<VariableDeclarator> variables) {
-            return variables.stream().mapToInt(variable -> variable.getName().getIdentifier().length()).sum();
+            return variables.stream().mapToInt(variable -> variable.getNameAsString().length()).sum();
         }
     }
 }
