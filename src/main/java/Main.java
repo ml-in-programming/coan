@@ -12,7 +12,7 @@ public class Main {
                     String name = m.getNameAsString();
                     return !name.startsWith("get") && !name.startsWith("set") && !name.startsWith("add");
                 });
-        //System.out.println(stats.getAst());
+        System.out.println(stats.getAst());
         System.out.println("Number of classes: " + stats.getClasses());
         System.out.println("Number of inner classes: " + stats.getInnerClasses());
         System.out.println("Number of interfaces: " + stats.getInterfaces());
