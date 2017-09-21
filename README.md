@@ -8,9 +8,9 @@ Test assignment for a project in code-style analysis.
       * interfaces;
       * inner classes;
       * methods;
-      * non-whitespace characters in methods. Includes methods' declarations;
-      * lines in methods. Includes methods' declarations;
-      * fields. You can get number of private and public fields specifically;
+      * non-whitespace characters in methods (includes methods' declarations);
+      * lines in methods (includes methods' declarations);
+      * fields (you can get number of private and public fields specifically);
       * local variables;
   * Total length of names of fields;
   * Total length of names of variables;
