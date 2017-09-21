@@ -42,7 +42,7 @@ public class StatisticsCollector {
         try {
             FileInputStream in = new FileInputStream(path.toString());
             CompilationUnit cu = JavaParser.parse(in);
-            MethodCollector.getStatistics(cu, stats);
+            CompilationUnitCollector.getStatistics(cu, stats);
         } catch (FileNotFoundException e) {
             System.out.println("Unable to read file " + path.toString());
         }

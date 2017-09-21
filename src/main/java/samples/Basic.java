@@ -16,4 +16,6 @@ public class Basic {
         String[] arrayOfStrings = {"a", "b"};
         return b - value;
     }
+
+    private class InnerClass{}
 }

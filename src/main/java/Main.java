@@ -8,6 +8,9 @@ public class Main {
     public static void main(String[] args) throws Exception {
         StatisticsHolder stats = StatisticsCollector.collectFromProject(Paths.get(System.getProperty("user.dir")));
         System.out.println(stats.getAst());
+        System.out.println("Number of classes: " + stats.getClasses());
+        System.out.println("Number of inner classes: " + stats.getInnerClasses());
+        System.out.println("Number of interfaces: " + stats.getInterfaces());
         System.out.println("Number of methods: " + stats.getMethods());
         System.out.println("Total number of characters in methods: " + stats.getMethodsCharacters());
         System.out.println("Total number of lines in methods: " + stats.getMethodsLines());

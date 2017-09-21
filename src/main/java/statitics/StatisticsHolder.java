@@ -22,6 +22,12 @@ public class StatisticsHolder {
     private int fieldsLength = 0;
     /** Total length of all local variables. */
     private int variablesLength = 0;
+    /** Number of classes. */
+    private int classes = 0;
+    /** Number of interfaces. */
+    private int interfaces = 0;
+    /** Number of inner classes. */
+    private int innerClasses = 0;
 
      public String getAst() {
         return ast;
@@ -63,6 +69,18 @@ public class StatisticsHolder {
         return variablesLength;
     }
 
+    public int getClasses() {
+        return classes;
+    }
+
+    public int getInterfaces() {
+        return interfaces;
+    }
+
+    public int getInnerClasses() {
+        return innerClasses;
+    }
+
     public void addAst(String ast) {
         this.ast += "\n" + ast;
     }
@@ -101,5 +119,17 @@ public class StatisticsHolder {
 
     public void addVariablesLength(int variablesLength) {
         this.variablesLength += variablesLength;
+    }
+
+    public void addClasses(int classes) {
+        this.classes += classes;
+    }
+
+    public void addInterfaces(int interfaces) {
+        this.interfaces += interfaces;
+    }
+
+    public void addInnerClasses(int innerClasses) {
+        this.innerClasses += innerClasses;
     }
 }

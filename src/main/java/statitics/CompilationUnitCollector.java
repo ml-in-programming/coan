@@ -2,6 +2,7 @@ package statitics;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -9,7 +10,7 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.apache.commons.lang3.StringUtils;
 
-public class MethodCollector {
+public class CompilationUnitCollector {
 
     public static void getStatistics(CompilationUnit compilationUnit, StatisticsHolder stats) {
         compilationUnit.accept(new MethodVisitor(), stats);
@@ -17,6 +18,18 @@ public class MethodCollector {
 
     /** Visitor that collects statistics about methods. */
     private static class MethodVisitor extends VoidVisitorAdapter<StatisticsHolder> {
+
+        @Override
+        public void visit(ClassOrInterfaceDeclaration declaration, StatisticsHolder stats) {
+            if (declaration.isInterface()) {
+                stats.addInterfaces(1);
+            } else if (declaration.isInnerClass()) {
+                stats.addInnerClasses(1);
+            } else {
+                stats.addClasses(1);
+            }
+            super.visit(declaration, stats);
+        }
 
         @Override
         public void visit(MethodDeclaration method, StatisticsHolder stats) {
