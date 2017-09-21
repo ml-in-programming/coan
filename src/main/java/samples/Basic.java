@@ -1,5 +1,6 @@
 package samples;
 
+/** Needed to test that project works. */
 public class Basic {
 
     public static int value = 0, secondValue;

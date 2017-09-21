@@ -14,12 +14,18 @@ import java.util.function.Predicate;
 
 public class CompilationUnitCollector {
 
+    /**
+     * Collects different stats from {@link CompilationUnit}. You can find list of stats in {@link StatisticsHolder}.
+     * @param compilationUnit {@link CompilationUnit} from which statistics will be collected.
+     * @param stats {@link StatisticsHolder} in which all the stats will be saved.
+     * @param filter predicate that returns true if you want to take a method into account.
+     */
     public static void getStatistics(
             CompilationUnit compilationUnit, StatisticsHolder stats, Predicate<MethodDeclaration> filter) {
         compilationUnit.accept(new MethodVisitor(filter), stats);
     }
 
-    /** Visitor that collects statistics about methods. */
+    /** Visitor that collects statistics about classes, methods etc. */
     private static class MethodVisitor extends VoidVisitorAdapter<StatisticsHolder> {
 
         private Predicate<MethodDeclaration> filter = m -> true;

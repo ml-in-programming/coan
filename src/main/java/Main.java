@@ -3,6 +3,10 @@ import statitics.StatisticsHolder;
 
 import java.nio.file.Paths;
 
+/**
+ * Demonstration of usage of the project.
+ * Collects information about this project, filtering out methods starting with "get", "set" and "add".
+ */
 public class Main {
 
     public static void main(String[] args) throws Exception {

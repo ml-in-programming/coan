@@ -6,6 +6,7 @@ import com.github.javaparser.printer.XmlPrinter;
 
 public class AstCollector {
 
+    /** Prints AST of a {@link CompilationUnit} in standard output. */
     public static void printAst(CompilationUnit cu) {
         String xmlString = new XmlPrinter(true).output(cu);
         System.out.println(addTabulationToXml(xmlString));
