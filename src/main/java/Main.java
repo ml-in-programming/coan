@@ -1,10 +1,12 @@
 import statitics.StatisticsCollector;
 import statitics.StatisticsHolder;
 
+import java.nio.file.Paths;
+
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        StatisticsHolder stats = StatisticsCollector.collectFromFile("src/main/java/samples/Basic.java");
+        StatisticsHolder stats = StatisticsCollector.collectFromProject(Paths.get(System.getProperty("user.dir")));
         System.out.println(stats.getAst());
         System.out.println("Number of methods: " + stats.getMethods());
         System.out.println("Total number of characters in methods: " + stats.getMethodsCharacters());
