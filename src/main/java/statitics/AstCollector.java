@@ -5,9 +5,10 @@ import com.github.javaparser.printer.XmlPrinter;
 
 public class AstCollector {
 
-    public static StatisticsHolder getAst(MethodDeclaration method, StatisticsHolder stats) {
+    /** Adds ast of method in xml format to the {@link StatisticsHolder}. */
+    public static void getAst(MethodDeclaration method, StatisticsHolder stats) {
         String xmlString = new XmlPrinter(true).output(method);
-        return stats.addAst(method.getName() + ":\n" + addTabulationToXml(xmlString));
+        stats.addAst(method.getName() + ":\n" + addTabulationToXml(xmlString));
     }
 
     private static String addTabulationToXml(String xmlString) {

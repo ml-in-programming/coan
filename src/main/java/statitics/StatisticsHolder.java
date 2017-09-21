@@ -1,60 +1,46 @@
 package statitics;
 
-import com.google.auto.value.AutoValue;
-
-@AutoValue
-public abstract class StatisticsHolder {
+public class StatisticsHolder {
 
     /** Visual representation of AST in xml-format. */
-    public abstract String getAst();
-
+    private String ast = "";
     /** Number of methods. */
-    public abstract int getMethodsNumber();
-
+    private int methodsNumber = 0;
     /** Number of non-whitespace characters in methods. Includes methods' declarations. */
-    public abstract int getTotalCharacters();
-
+    private int totalMethodsCharacters = 0;
     /** Number of lines in methods. Includes methods' declarations. */
-    public abstract int getTotalLines();
+    private int totalMethodsLines = 0;
 
-    public abstract Builder toBuilder();
-
-    public static StatisticsHolder create() {
-        return new AutoValue_StatisticsHolder.Builder()
-                .setAst("")
-                .setMethodsNumber(0)
-                .setTotalCharacters(0)
-                .setTotalLines(0)
-                .build();
+     public String getAst() {
+        return ast;
     }
 
-    public StatisticsHolder addAst(String ast) {
-        return toBuilder().setAst(getAst() + "\n" + ast).build();
+    public int getMethodsNumber() {
+        return methodsNumber;
     }
 
-    public StatisticsHolder addMethodsNumber(int methodsNumber) {
-        return toBuilder().setMethodsNumber(getMethodsNumber() + methodsNumber).build();
+    public int getTotalMethodsCharacters() {
+        return totalMethodsCharacters;
     }
 
-    public StatisticsHolder addMethodsCharacters(int characters) {
-        return toBuilder().setTotalCharacters(getTotalCharacters() + characters).build();
+    public int getTotalMethodsLines() {
+        return totalMethodsLines;
     }
 
-    public StatisticsHolder addMethodsLines(int lines) {
-        return toBuilder().setTotalLines(getTotalLines() + lines).build();
+    public void addAst(String ast) {
+        this.ast += "\n" + ast;
     }
 
-    @AutoValue.Builder
-    static abstract class Builder {
-
-        public abstract Builder setAst(String ast);
-
-        public abstract Builder setMethodsNumber(int methodsNumber);
-
-        public abstract Builder setTotalCharacters(int totalCharacters);
-
-        public abstract Builder setTotalLines(int totalLines);
-
-        public abstract StatisticsHolder build();
+    public void addMethodsNumber(int methodsNumber) {
+       this.methodsNumber += methodsNumber;
     }
+
+    public void addMethodsCharacters(int totalMethodsCharacters) {
+        this.totalMethodsCharacters += totalMethodsCharacters;
+    }
+
+    public void addMethodsLines(int totalMethodsLines) {
+        this.totalMethodsLines += totalMethodsLines;
+    }
+
 }

@@ -15,11 +15,13 @@ public class StatisticsCollector {
      * @throws FileNotFoundException if there was no file at given path.
      */
     public static StatisticsHolder collectFromFile(String path) throws FileNotFoundException {
+        StatisticsHolder stats = new StatisticsHolder();
 
         // Parse the file
         FileInputStream in = new FileInputStream(path);
         CompilationUnit cu = JavaParser.parse(in);
 
-        return MethodCollector.getStatistics(cu, StatisticsHolder.create());
+        MethodCollector.getStatistics(cu, stats);
+        return stats;
     }
 }

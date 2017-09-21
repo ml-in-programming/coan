@@ -7,7 +7,7 @@ public class Main {
         StatisticsHolder stats = StatisticsCollector.collectFromFile("src/main/java/samples/Basic.java");
         System.out.println(stats.getAst());
         System.out.println("Number of methods: " + stats.getMethodsNumber());
-        System.out.println("Total number of characters in methods: " + stats.getTotalCharacters());
-        System.out.println("Total number of lines in methods: " + stats.getTotalLines());
+        System.out.println("Total number of characters in methods: " + stats.getTotalMethodsCharacters());
+        System.out.println("Total number of lines in methods: " + stats.getTotalMethodsLines());
     }
 }
