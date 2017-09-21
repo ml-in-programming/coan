@@ -20,6 +20,7 @@ public class StatisticsCollector {
         // Parse the file
         FileInputStream in = new FileInputStream(path);
         CompilationUnit cu = JavaParser.parse(in);
+        AstCollector.printAst(cu);
 
         MethodCollector.getStatistics(cu, stats);
         return stats;

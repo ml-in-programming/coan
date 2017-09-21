@@ -1,9 +1,15 @@
 package statitics;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.printer.XmlPrinter;
 
 public class AstCollector {
+
+    public static void printAst(CompilationUnit cu) {
+        String xmlString = new XmlPrinter(true).output(cu);
+        System.out.println(addTabulationToXml(xmlString));
+    }
 
     /** Adds ast of method in xml format to the {@link StatisticsHolder}. */
     public static void getAst(MethodDeclaration method, StatisticsHolder stats) {
