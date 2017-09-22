@@ -54,7 +54,7 @@ public class CompilationUnitCollector {
                 return;
             }
             AstCollector.getAst(method, stats);
-            stats.addMethodsNumber(1);
+            stats.addMethods(1);
             stats.addMethodsCharacters(method.toString().replaceAll("\\s+","").length());
             stats.addMethodsLines(StringUtils.countMatches(method.toString(), "\n") + 1);
             super.visit(method, stats);

@@ -82,10 +82,13 @@ public class StatisticsHolder {
     }
 
     public void addAst(String ast) {
-        this.ast += "\n" + ast;
+        if (!this.ast.isEmpty()) {
+            this.ast += "\n";
+        }
+        this.ast += ast;
     }
 
-    public void addMethodsNumber(int methods) {
+    public void addMethods(int methods) {
         this.methods += methods;
     }
 
