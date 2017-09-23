@@ -14,6 +14,8 @@ public class CompilationUnitCollectorTest {
 
     private static final int numberOfClasses = 2;
     private static final int numberOfInterfaces = 3;
+    private static final int numberOfPrivateFields = 4;
+    private static final int numberOfPublicFields = 5;
 
     private static FieldDeclaration privateField;
     private static FieldDeclaration publicField;
@@ -34,8 +36,14 @@ public class CompilationUnitCollectorTest {
         for (int i = 2; i <= numberOfInterfaces; i++) {
             compilationUnit.addInterface("GeneratedInterface" + i);
         }
-        privateField = typeClass.addField(new PrimitiveType(), "privateField",Modifier.PRIVATE);
-        publicField = typeClass.addField(new PrimitiveType(), "publicField",Modifier.PUBLIC);
+        privateField = typeClass.addField(new PrimitiveType(), "privateField1", Modifier.PRIVATE);
+        for (int i = 2; i <= numberOfPrivateFields; i++) {
+            typeClass.addField(new PrimitiveType(), "privateField" + i, Modifier.PRIVATE);
+        }
+        publicField = typeClass.addField(new PrimitiveType(), "publicField1", Modifier.PUBLIC);
+        for (int i = 2; i <= numberOfPublicFields; i++) {
+            typeClass.addField(new PrimitiveType(), "publicField" + i, Modifier.PUBLIC);
+        }
     }
 
     @Test
@@ -44,5 +52,17 @@ public class CompilationUnitCollectorTest {
         CompilationUnitCollector.getStatistics(compilationUnit, stats, m -> false);
         assertEquals(stats.getClasses(), numberOfClasses);
         assertEquals(stats.getInterfaces(), numberOfInterfaces);
+    }
+
+    @Test
+    public void getFieldsStatistics() {
+        StatisticsHolder stats = new StatisticsHolder();
+        CompilationUnitCollector.getStatistics(compilationUnit, stats, m -> false);
+        assertEquals(stats.getFields(), numberOfPrivateFields + numberOfPublicFields);
+        assertEquals(stats.getPublicFields(), numberOfPublicFields);
+        assertEquals(stats.getPrivateFields(), numberOfPrivateFields);
+        assertEquals(stats.getFieldsLength(),
+                "privateFieldN".length() * numberOfPrivateFields +
+                        "publicFieldN".length() * numberOfPublicFields);
     }
 }
