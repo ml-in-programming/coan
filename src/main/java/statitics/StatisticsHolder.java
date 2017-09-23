@@ -84,8 +84,7 @@ public class StatisticsHolder {
     public void addAst(String ast) {
         if (!this.ast.isEmpty()) {
             this.ast += "\n";
-        }
-        this.ast += ast;
+        }this.ast += ast;
     }
 
     public void addMethods(int methods) {
