@@ -29,7 +29,7 @@ public class StatisticsHolder {
     /** Number of inner classes. */
     private int innerClasses = 0;
 
-     public String getAst() {
+    public String getAst() {
         return ast;
     }
 
