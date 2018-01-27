@@ -3,20 +3,10 @@ package samples;
 /** Needed to test that project works. */
 public class Basic {
 
-    public static int value = 0, secondValue;
-    private Basic classMember;
+    public void foo() {
 
-    private void foo() {
+        int a = 0;
 
+        int b = 1;
     }
-
-    public int getValue() {
-        char random;
-        int a = 3, aa = 33, aaa = 333;
-        int b = (value + a) * a;
-        String[] arrayOfStrings = {"a", "b"};
-        return b - value;
-    }
-
-    private class InnerClass{}
 }
