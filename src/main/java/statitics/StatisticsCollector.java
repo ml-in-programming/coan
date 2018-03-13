@@ -7,7 +7,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +34,7 @@ public class StatisticsCollector {
                 StatisticsHolder stat = new StatisticsHolder();
                 try {
                     collectFromFile(p, stat, filter);
-                    stat.addToStringField(PATH, p.toString());
+                    stat.addToStringFeature(PATH, p.toString());
                     stats.add(stat);
                 } catch(Exception e) {
                     System.out.println("Unable to read file " + path.toString());

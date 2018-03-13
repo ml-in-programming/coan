@@ -2,6 +2,10 @@ package statitics;
 
 import java.util.*;
 
+/**
+ * To add a feature you should add a field with its name and add it to a list according to its type (e.g. create field
+ * named SYMBOL with value "Symbol" and add it to INT_FEATURES).
+ */
 public class StatisticsHolder {
     /**
      * Path to file.
@@ -167,7 +171,7 @@ public class StatisticsHolder {
         NOMINAL
     }
 
-    private static final Set<String> INT_FIELDS = new HashSet<>(Arrays.asList(
+    private static final Set<String> INT_FEATURES = new HashSet<>(Arrays.asList(
             METHODS, METHODS_CHARACTERS, METHODS_LINES, METHODS_PARAMETERS, FIELDS, PRIVATE_FIELDS, PUBLIC_FIELDS,
             LOCAL_VARIABLES, FIELDS_LENGTH, VARIABLES_LENGTH, CLASSES, INTERFACES, INNER_CLASSES, FORS, WHILES, IFS,
             ELSES, ELSE_IFS, TERNARY, STRING_CONSTANTS, INT_CONSTANTS, CHAR_CONSTANTS, LAMBDAS, BREAKS, CONTINUES,
@@ -175,89 +179,89 @@ public class StatisticsHolder {
             WHITESPACE_CHARS
     ));
 
-    private static final Set<String> STRING_FIELDS = new HashSet<>(Arrays.asList(
+    private static final Set<String> STRING_FEATURES = new HashSet<>(Arrays.asList(
             PATH, AST
     ));
 
-    private static final Set<String> NOMINAL_FIELDS = new HashSet<>(Arrays.asList(
+    private static final Set<String> NOMINAL_FEATURES = new HashSet<>(Arrays.asList(
             TABS_LEAD_LINES, PUNCTUATION_BEFORE_BRACE
     ));
 
-    private static final List<String> ALL_FIELDS = new ArrayList<>();
+    private static final List<String> ALL_FEATURES = new ArrayList<>();
 
     private final Map<String, Object> values = new HashMap<>();
 
-    public int getIntField(String field) {
-        if (!INT_FIELDS.contains(field)) {
+    public int getIntFeature(String field) {
+        if (!INT_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't an int field.");
         }
         return (Integer)values.get(field);
     }
 
-    public String getStringField(String field) {
-        if (!STRING_FIELDS.contains(field)) {
+    public String getStringFeature(String field) {
+        if (!STRING_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a string field.");
         }
         return (String)values.get(field);
     }
 
-    public String getNominalField(String field) {
-        if (!NOMINAL_FIELDS.contains(field)) {
+    public String getNominalFeature(String field) {
+        if (!NOMINAL_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a nominal field.");
         }
         return (String)values.get(field);
     }
 
-    public void addToIntField(String field, int val) {
-        if (!INT_FIELDS.contains(field)) {
+    public void addToIntFeature(String field, int val) {
+        if (!INT_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to add, " + field + " isn't an int field.");
         }
         int updatedVal = (Integer) values.get(field) + val;
         values.put(field, updatedVal);
     }
 
-    public void addToStringField(String field, String val) {
-        if (!STRING_FIELDS.contains(field)) {
+    public void addToStringFeature(String field, String val) {
+        if (!STRING_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to add, " + field + " isn't a string field.");
         }
         String updatedVal = values.get(field) + val;
         values.put(field, updatedVal);
     }
 
-    public void setNominalField(String field, String val) {
-        if (!NOMINAL_FIELDS.contains(field)) {
+    public void setNominalFeature(String field, String val) {
+        if (!NOMINAL_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to set, " + field + " isn't a nominal field.");
         }
         values.put(field, val);
     }
 
     public static List<String> getListOfFeatures() {
-        return ALL_FIELDS;
+        return ALL_FEATURES;
     }
 
     public static ValueType getType(String field) {
-        if (INT_FIELDS.contains(field)) return ValueType.INT;
-        if (STRING_FIELDS.contains(field)) return ValueType.STRING;
-        if (NOMINAL_FIELDS.contains(field)) return ValueType.NOMINAL;
+        if (INT_FEATURES.contains(field)) return ValueType.INT;
+        if (STRING_FEATURES.contains(field)) return ValueType.STRING;
+        if (NOMINAL_FEATURES.contains(field)) return ValueType.NOMINAL;
         return null;
     }
 
     static {
-        ALL_FIELDS.addAll(INT_FIELDS);
-        ALL_FIELDS.addAll(STRING_FIELDS);
-        ALL_FIELDS.addAll(NOMINAL_FIELDS);
+        ALL_FEATURES.addAll(INT_FEATURES);
+        ALL_FEATURES.addAll(STRING_FEATURES);
+        ALL_FEATURES.addAll(NOMINAL_FEATURES);
     }
 
     public StatisticsHolder() {
-        for (String field : INT_FIELDS) {
+        for (String field : INT_FEATURES) {
             values.put(field, 0);
         }
 
-        for (String field : STRING_FIELDS) {
+        for (String field : STRING_FEATURES) {
             values.put(field, "");
         }
 
-        for (String field : NOMINAL_FIELDS) {
+        for (String field : NOMINAL_FEATURES) {
             values.put(field, "NaN");
         }
     }

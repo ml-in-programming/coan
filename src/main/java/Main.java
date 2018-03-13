@@ -1,4 +1,3 @@
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import statitics.StatisticsCollector;
 import statitics.StatisticsHolder;
 
@@ -33,10 +32,16 @@ public class Main {
      */
     private static final int MIN_FILES_TO_TEST = 1;
 
+    /**
+     * Writes comma-separated list of feature titles.
+     */
     private static void writeCsvHeader(PrintWriter writer, List<String> features) {
         writer.println(features.stream().collect(Collectors.joining(",", "", "")));
     }
 
+    /**
+     * Writes a line with all features from {@code features} saved in {@code stats}.
+     */
     private static void writeFileStats(PrintWriter writer, StatisticsHolder stats, List<String> features) {
         writer.println(features.stream().map(feature -> {
             StatisticsHolder.ValueType type = StatisticsHolder.getType(feature);
@@ -45,18 +50,22 @@ public class Main {
             }
             switch (type) {
                 case INT:
-                    return Integer.toString(stats.getIntField(feature));
+                    return Integer.toString(stats.getIntFeature(feature));
                 case STRING:
-                    return stats.getStringField(feature);
+                    return stats.getStringFeature(feature);
                 case NOMINAL:
-                    return stats.getNominalField(feature);
+                    return stats.getNominalFeature(feature);
                 default:
                     return "NaN";
             }
         }).collect(Collectors.joining(",", "", "")));
     }
 
-    private static void writeStats(PrintWriter writer, File[] subDirs, List<String> features) throws IOException {
+    /**
+     * Collects stats from all .java files found in {@code subDirs} and writes them in .csv format.
+     */
+    private static void collectAndWriteStats(PrintWriter writer, File[] subDirs, List<String> features)
+            throws IOException {
         for (File subDir : subDirs) {
             if (subDir.isDirectory()) {
                 System.out.println("Collecting from: " + subDir.getName());
@@ -85,7 +94,7 @@ public class Main {
         PrintWriter writer = new PrintWriter(dataFile, "UTF-8");
         List<String> features = getFeatures();
         writeCsvHeader(writer, features);
-        writeStats(writer, subDirs, features);
+        collectAndWriteStats(writer, subDirs, features);
         writer.close();
     }
 
