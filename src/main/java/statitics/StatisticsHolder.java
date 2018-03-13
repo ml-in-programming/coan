@@ -22,8 +22,25 @@ public class StatisticsHolder {
 
     private final Map<String, Object> values = new HashMap<>();
 
-    public Object get(String field) {
-        return values.get(field);
+    public int getIntField(String field) {
+        if (!INT_FIELDS.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't an int field.");
+        }
+        return (Integer)values.get(field);
+    }
+
+    public String getStringField(String field) {
+        if (!STRING_FIELDS.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't a string field.");
+        }
+        return (String)values.get(field);
+    }
+
+    public String getNominalField(String field) {
+        if (!NOMINAL_FIELDS.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't a nominal field.");
+        }
+        return (String)values.get(field);
     }
 
     public void addToIntField(String field, int val) {
