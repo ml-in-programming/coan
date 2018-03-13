@@ -161,7 +161,7 @@ public class StatisticsHolder {
      */
     public static final String WHITESPACE_CHARS = "Whitespace";
 
-    enum ValueType {
+    public enum ValueType {
         INT,
         STRING,
         NOMINAL
