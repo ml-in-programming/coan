@@ -1,6 +1,7 @@
 package statitics;
 
 import static statitics.StatisticsHolder.PATH;
+import static statitics.StatisticsHolder.PROJECT;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -28,6 +29,7 @@ public class StatisticsCollector {
      */
     public static List<StatisticsHolder> collectFromProject(Path path, Predicate<MethodDeclaration> filter)
             throws IOException {
+        String projectName = path.getFileName().toString();
         List<StatisticsHolder> stats = new ArrayList<>();
         Files.walk(path).forEach(p -> {
             if (p.getFileName().toString().endsWith(".java")) {
@@ -35,6 +37,7 @@ public class StatisticsCollector {
                 try {
                     collectFromFile(p, stat, filter);
                     stat.addToStringFeature(PATH, p.toString());
+                    stat.addToStringFeature(PROJECT, projectName);
                     stats.add(stat);
                 } catch(Exception e) {
                     System.out.println("Unable to read file " + path.toString());

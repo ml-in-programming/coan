@@ -12,6 +12,10 @@ public class StatisticsHolder {
      */
     public static String PATH = "Path";
     /**
+     * Project's name.
+     */
+    public static String PROJECT = "Project";
+    /**
      * Visual representation of AST in xml-format.
      */
     public static String AST = "Ast";
@@ -180,7 +184,7 @@ public class StatisticsHolder {
     ));
 
     private static final Set<String> STRING_FEATURES = new HashSet<>(Arrays.asList(
-            PATH, AST
+            PROJECT, PATH, AST
     ));
 
     private static final Set<String> NOMINAL_FEATURES = new HashSet<>(Arrays.asList(
