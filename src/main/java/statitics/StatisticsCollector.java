@@ -31,15 +31,19 @@ public class StatisticsCollector {
         Files.walk(path).forEach(p -> {
             if (p.getFileName().toString().endsWith(".java")) {
                 StatisticsHolder stat = new StatisticsHolder();
-                collectFromFile(p, stat, filter);
-                stat.path = p.toString();
-                stats.add(stat);
+                try {
+                    collectFromFile(p, stat, filter);
+                    stat.path = p.toString();
+                    stats.add(stat);
+                } catch(Exception e) {
+                    System.out.println("Unable to read file " + path.toString());
+                }
             }
         });
         return stats;
     }
 
-    public static StatisticsHolder collectFromFile(Path path) {
+    public static StatisticsHolder collectFromFile(Path path) throws Exception {
         return collectFromFile(path, m -> true);
     }
 
@@ -49,27 +53,24 @@ public class StatisticsCollector {
      * @param filter returns true if you want to take the method into account.
      * @return statistics about the class that is stored in that file.
      */
-    public static StatisticsHolder collectFromFile(Path path, Predicate<MethodDeclaration> filter) {
+    public static StatisticsHolder collectFromFile(Path path, Predicate<MethodDeclaration> filter) throws Exception {
         StatisticsHolder stats = new StatisticsHolder();
         collectFromFile(path, stats, filter);
         return stats;
     }
 
-    public static void collectFromFile(Path path, StatisticsHolder stats, Predicate<MethodDeclaration> filter) {
-        try {
-            FileInputStream in = new FileInputStream(path.toString());
-            int content;
-            StringBuilder codeBuilder = new StringBuilder();
-            while ((content = in.read()) != -1) {
-                // convert to char and display it
-                codeBuilder.append((char) content);
-            }
-            String code = codeBuilder.toString();
-            CompilationUnit cu = JavaParser.parse(code);
-            CompilationUnitCollector.getStatistics(cu, stats, filter);
-            LayoutCollector.getLayoutFeatures(code, stats);
-        } catch (IOException e) {
-            System.out.println("Unable to read file " + path.toString());
+    public static void collectFromFile(Path path, StatisticsHolder stats, Predicate<MethodDeclaration> filter)
+            throws Exception {
+        FileInputStream in = new FileInputStream(path.toString());
+        int content;
+        StringBuilder codeBuilder = new StringBuilder();
+        while ((content = in.read()) != -1) {
+            // convert to char and display it
+            codeBuilder.append((char) content);
         }
+        String code = codeBuilder.toString();
+        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnitCollector.getStatistics(cu, stats, filter);
+        LayoutCollector.getLayoutFeatures(code, stats);
     }
 }

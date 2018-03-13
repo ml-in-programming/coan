@@ -13,9 +13,11 @@ import java.util.List;
  */
 public class Main {
 
-    private static final String PATH_TO_CSV = "/home/egor/PyCharm2017/projects/simple_lstm/data.csv";
-    private static final String PATH_TO_REPOSITORIES = "/home/egor/PyCharm2017/projects/simple_lstm/reps";
-    private static final int MIN_FILES_TO_TEST = 3;
+    private static final String PROJECT = "github-java-corpus";
+    private static final String ROOT = "/home/egor/PycharmProjects/stan/";
+    private static final String PATH_TO_CSV = ROOT + "data.csv";
+    private static final String PATH_TO_REPOSITORIES = ROOT + "data/" + PROJECT + "/reps/";
+    private static final int MIN_FILES_TO_TEST = 1;
 
     public static void writeHeader(PrintWriter writer) {
         writer.println("ProjectName,Path,For,While,If,Else,ElseIf,TernaryOperator,StringConstant,IntConstant," +
@@ -32,6 +34,7 @@ public class Main {
                 if (allStats.size() < MIN_FILES_TO_TEST) {
                     continue;
                 }
+                System.out.println(subDir.getName());
                 for (StatisticsHolder stats : allStats) {
                     writer.println(subDir.getName() + "," +
                             stats.path + "," +
@@ -75,7 +78,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    private static void processAndSaveData() throws Exception {
         File dataFile = new File(PATH_TO_CSV);
         File repsDirectory = new File(PATH_TO_REPOSITORIES);
         File[] subDirs = repsDirectory.listFiles();
@@ -84,5 +87,9 @@ public class Main {
         writeHeader(writer);
         writeStats(writer, subDirs);
         writer.close();
+    }
+
+    public static void main(String[] args) throws Exception {
+        processAndSaveData();
     }
 }
