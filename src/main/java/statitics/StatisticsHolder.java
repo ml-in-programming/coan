@@ -1,136 +1,167 @@
 package statitics;
 
-// TODO: implement map with keys instead of fields.
+import java.util.HashMap;
+import java.util.Map;
+
 public class StatisticsHolder {
 
-    public String path = "";
-    /** Visual representation of AST in xml-format. */
-    public String ast = "";
-    /** Number of methods. */
-    public int methods = 0;
-    /** Number of non-whitespace characters in methods. Includes methods' declarations. */
-    public int methodsCharacters = 0;
-    /** Number of lines in methods. Includes methods' declarations. */
-    public int methodsLines = 0;
+    public final Map<String, Object> values = new HashMap<>();
+
+    /**
+     * Path to file.
+     */
+    public String PATH = "Path";
+    /**
+     * Visual representation of AST in xml-format.
+     */
+    public String AST = "Ast";
+    /**
+     * Number of methods.
+     */
+    public static final String METHODS = "Method";
+    /**
+     * Number of non-whitespace characters in methods. Includes methods' declarations.
+     */
+    public static final String METHODS_CHARACTERS = "MethodsCharacters";
+    /**
+     * Number of lines in methods. Includes methods' declarations.
+     */
+    public static final String METHODS_LINES = "MethodsLines";
     /**
      * Number of parameters in methods.
      */
-    public int methodsParameters = 0;
-    /** Number of fields. */
-    public int fields = 0;
-    /** Number of public fields. */
-    public int privateFields = 0;
+    public static final String METHODS_PARAMETERS = "MethodsParameters";
+    /**
+     * Number of fields.
+     */
+    public static final String FIELDS = "Fields";
     /**
      * Number of public fields.
      */
-    public int publicFields;
-    /** Number of local variables. */
-    public int localVariables = 0;
-    /** Total length of all fields. */
-    public int fieldsLength = 0;
-    /** Total length of all local variables. */
-    public int variablesLength = 0;
-    /** Number of classes. */
-    public int classes = 0;
-    /** Number of interfaces. */
-    public int interfaces = 0;
-    /** Number of inner classes. */
-    public int innerClasses = 0;
+    public static final String PRIVATE_FIELDS = "PrivateFields";
+    /**
+     * Number of public fields.
+     */
+    public static final String PUBLIC_FIELDS = "PublicFields";
+    /**
+     * Number of local variables.
+     */
+    public static final String LOCAL_VARIABLES = "LocalVariables";
+    /**
+     * Total length of all fields.
+     */
+    public static final String FIELDS_LENGTH = "FieldsLength";
+    /**
+     * Total length of all local variables.
+     */
+    public static final String VARIABLES_LENGTH = "VariablesLength";
+    /**
+     * Number of classes.
+     */
+    public static final String CLASSES = "Classes";
+    /**
+     * Number of interfaces.
+     */
+    public static final String INTERFACES = "Interfaces";
+    /**
+     * Number of inner classes.
+     */
+    public static final String INNER_CLASSES = "InnerClasses";
     /**
      * Number of for cycles.
      */
-    public int fors = 0;
+    public static final String FORS = "For";
     /**
      * Number of while cycles.
      */
-    public int whiles = 0;
+    public static final String WHILES = "While";
     /**
      * Number of if statements.
      */
-    public int ifs = 0;
+    public static final String IFS = "If";
     /**
      * Number of else statements.
      */
-    public int elses = 0;
+    public static final String ELSES = "Else";
     /**
      * Number of "else if" statements.
      */
-    public int elseIfs = 0;
+    public static final String ELSE_IFS = "ElseIf";
     /**
      * Number of ternary operators (? :).
      */
-    public int ternary = 0;
+    public static final String TERNARY = "TernaryOperator";
     /**
      * Number of string literals.
      */
-    public int stringConstants = 0;
+    public static final String STRING_CONSTANTS = "StringConstant";
     /**
      * Number of integer constants.
      */
-    public int intConstants = 0;
+    public static final String INT_CONSTANTS = "IntConstant";
     /**
      * Number of char constants.
      */
-    public int charConstants = 0;
+    public static final String CHAR_CONSTANTS = "CharConstant";
     /**
      * Number of lambda functions.
      */
-    public int lambdas = 0;
+    public static final String LAMBDAS = "Lambda";
     /**
      * Number of break statements.
      */
-    public int breaks = 0;
+    public static final String BREAKS = "Break";
     /**
      * Number of continue statements.
      */
-    public int continues = 0;
+    public static final String CONTINUES = "Continue";
     /**
      * Number of nulls.
      */
-    public int nulls = 0;
+    public static final String NULLS = "Null";
     /**
      * Number of comments starting with //
      */
-    public int lineComments = 0;
+    public static final String LINE_COMMENTS = "LineComment";
     /**
      * Number of comments starting with /*.
      */
-    public int blockComments = 0;
+    public static final String BLOCK_COMMENTS = "BlockComment";
     /**
      * Number of java-doc comments.
      */
-    public int javaDocComments = 0;
+    public static final String JAVA_DOC_COMMENTS = "JavaDocComment";
     /**
      * Length of file in characters.
      */
-    public int totalLength = 0;
+    public static final String TOTAL_LENGTH = "TotalLength";
     /**
      * Length of file in lines.
      */
-    public int lines = 0;
+    public static final String LINES = "Line";
     /**
      * Number of \t symbols in file.
      */
-    public int tabs = 0;
+    public static final String TABS = "Tab";
     /**
      * Length of spaces in file.
      */
-    public int spaces = 0;
+    public static final String SPACES = "Space";
     /**
      * True if most of lines in the file start with tabs opposed to spaces .
      */
-    public boolean tabsLeadLines;
+    public static final String TABS_LEAD_LINES = "TabsLeadLines";
     /**
      * Has 3 options: "new line", "space" and "other" depending on whether most of "{" are preceded by new line symbol,
      * space or something else .
      **/
-    public String punctuationBeforeBrace;
+    public static final String PUNCTUATION_BEFORE_BRACE = "PunctuationBeforeBrace";
     /**
      * Number of empty lines.
      */
-    public int emptyLines = 0;
+    public static final String EMPTY_LINES = "EmptyLine";
     /**
      * Number of whitespace characters.
      */
-    public int whitespaceCharacters = 0;
+    public static final String WHITESPACE_CHARS = "Whitespace";
 }
