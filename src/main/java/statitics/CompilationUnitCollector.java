@@ -1,5 +1,7 @@
 package statitics;
 
+import static statitics.StatisticsHolder.*;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -20,37 +22,41 @@ public class CompilationUnitCollector {
 
     /**
      * Collects different stats from {@link CompilationUnit}. You can find list of stats in {@link StatisticsHolder}.
+     *
      * @param compilationUnit {@link CompilationUnit} from which statistics will be collected.
-     * @param stats {@link StatisticsHolder} in which all the stats will be saved.
-     * @param filter predicate that returns true if you want to take a method into account.
+     * @param stats           {@link StatisticsHolder} in which all the stats will be saved.
+     * @param filter          predicate that returns true if you want to take a method into account.
      */
     public static void getStatistics(
             CompilationUnit compilationUnit, StatisticsHolder stats, Predicate<MethodDeclaration> filter) {
         compilationUnit.accept(new MethodVisitor(filter), stats);
     }
 
-    /** Visitor that collects statistics about classes, methods etc. */
+    /**
+     * Visitor that collects statistics about classes, methods etc.
+     */
     private static class MethodVisitor extends VoidVisitorAdapter<StatisticsHolder> {
 
         private Predicate<MethodDeclaration> filter = m -> true;
 
-        private MethodVisitor() {}
+        private MethodVisitor() {
+        }
 
         @Override
         public void visit(BlockComment n, StatisticsHolder stats) {
-            stats.blockComments++;
+            stats.addToIntField(BLOCK_COMMENTS, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(BreakStmt n, StatisticsHolder stats) {
-            stats.breaks++;
+            stats.addToIntField(BREAKS, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(CharLiteralExpr n, StatisticsHolder stats) {
-            stats.charConstants++;
+            stats.addToIntField(CHAR_CONSTANTS, 1);
             super.visit(n, stats);
         }
 
@@ -61,24 +67,24 @@ public class CompilationUnitCollector {
         @Override
         public void visit(ClassOrInterfaceDeclaration declaration, StatisticsHolder stats) {
             if (declaration.isInterface()) {
-                stats.interfaces++;
+                stats.addToIntField(INTERFACES, 1);
             } else if (declaration.isInnerClass()) {
-                stats.innerClasses++;
+                stats.addToIntField(INNER_CLASSES, 1);
             } else {
-                stats.classes++;
+                stats.addToIntField(CLASSES, 1);
             }
             super.visit(declaration, stats);
         }
 
         @Override
         public void visit(ConditionalExpr n, StatisticsHolder stats) {
-            stats.ternary++;
+            stats.addToIntField(TERNARY, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(ContinueStmt n, StatisticsHolder stats) {
-            stats.continues++;
+            stats.addToIntField(CONTINUES, 1);
             super.visit(n, stats);
         }
 
@@ -88,59 +94,59 @@ public class CompilationUnitCollector {
                 return;
             }
             AstCollector.getAst(method, stats);
-            stats.methods++;
-            stats.methodsCharacters += method.toString().replaceAll("\\s+", "").length();
-            stats.methodsLines += StringUtils.countMatches(method.toString(), "\n") + 1;
-            stats.methodsParameters += method.getParameters().size();
+            stats.addToIntField(METHODS, 1);
+            stats.addToIntField(METHODS_CHARACTERS, method.toString().replaceAll("\\s+", "").length());
+            stats.addToIntField(METHODS_LINES, StringUtils.countMatches(method.toString(), "\n") + 1);
+            stats.addToIntField(METHODS_PARAMETERS, method.getParameters().size());
             super.visit(method, stats);
         }
 
         @Override
         public void visit(NullLiteralExpr n, StatisticsHolder stats) {
-            stats.nulls++;
+            stats.addToIntField(NULLS, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(StringLiteralExpr n, StatisticsHolder stats) {
-            stats.stringConstants++;
+            stats.addToIntField(STRING_CONSTANTS, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(FieldDeclaration declaration, StatisticsHolder stats) {
             int numberOfDeclared = declaration.getVariables().size();
-            stats.fields += numberOfDeclared;
+            stats.addToIntField(FIELDS, numberOfDeclared);
             if (declaration.isPrivate()) {
-                stats.privateFields += numberOfDeclared;
+                stats.addToIntField(PRIVATE_FIELDS, numberOfDeclared);
             }
             if (declaration.isPublic()) {
-                stats.publicFields += numberOfDeclared;
+                stats.addToIntField(PUBLIC_FIELDS, numberOfDeclared);
             }
-            stats.fieldsLength += getVariablesLength(declaration.getVariables());
+            stats.addToIntField(VARIABLES_LENGTH, getVariablesLength(declaration.getVariables()));
             super.visit(declaration, stats);
         }
 
         @Override
         public void visit(ForeachStmt n, StatisticsHolder stats) {
-            stats.fors++;
+            stats.addToIntField(FORS, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(ForStmt n, StatisticsHolder stats) {
-            stats.fors++;
+            stats.addToIntField(FORS, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(IfStmt n, StatisticsHolder stats) {
-            stats.ifs++;
+            stats.addToIntField(IFS, 1);
             if (n.getElseStmt().isPresent()) {
                 if (n.getElseStmt().get() instanceof IfStmt) {
-                    stats.elseIfs++;
+                    stats.addToIntField(ELSE_IFS, 1);
                 } else {
-                    stats.elses++;
+                    stats.addToIntField(ELSES, 1);
                 }
             }
             super.visit(n, stats);
@@ -149,38 +155,38 @@ public class CompilationUnitCollector {
 
         @Override
         public void visit(IntegerLiteralExpr n, StatisticsHolder stats) {
-            stats.intConstants++;
+            stats.addToIntField(INT_CONSTANTS, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(JavadocComment n, StatisticsHolder stats) {
-            stats.javaDocComments++;
+            stats.addToIntField(JAVA_DOC_COMMENTS, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(LineComment n, StatisticsHolder stats) {
-            stats.lineComments++;
+            stats.addToIntField(LINE_COMMENTS, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(VariableDeclarationExpr declaration, StatisticsHolder stats) {
-            stats.localVariables += declaration.getVariables().size();
-            stats.variablesLength += getVariablesLength(declaration.getVariables());
+            stats.addToIntField(LOCAL_VARIABLES, declaration.getVariables().size());
+            stats.addToIntField(VARIABLES_LENGTH, getVariablesLength(declaration.getVariables()));
             super.visit(declaration, stats);
         }
 
         @Override
         public void visit(WhileStmt n, StatisticsHolder stats) {
-            stats.whiles++;
+            stats.addToIntField(WHILES, 1);
             super.visit(n, stats);
         }
 
         @Override
         public void visit(LambdaExpr n, StatisticsHolder stats) {
-            stats.lambdas++;
+            stats.addToIntField(LAMBDAS, 1);
             super.visit(n, stats);
         }
 

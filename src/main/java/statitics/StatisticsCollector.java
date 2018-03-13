@@ -1,5 +1,7 @@
 package statitics;
 
+import static statitics.StatisticsHolder.PATH;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -33,7 +35,7 @@ public class StatisticsCollector {
                 StatisticsHolder stat = new StatisticsHolder();
                 try {
                     collectFromFile(p, stat, filter);
-                    stat.path = p.toString();
+                    stat.addToStringField(PATH, p.toString());
                     stats.add(stat);
                 } catch(Exception e) {
                     System.out.println("Unable to read file " + path.toString());
