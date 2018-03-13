@@ -1,20 +1,76 @@
 package statitics;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class StatisticsHolder {
 
-    public final Map<String, Object> values = new HashMap<>();
+    private final Set<String> INT_FIELDS = new HashSet<>(Arrays.asList(
+            METHODS, METHODS_CHARACTERS, METHODS_LINES, METHODS_PARAMETERS, FIELDS, PRIVATE_FIELDS, PUBLIC_FIELDS,
+            LOCAL_VARIABLES, FIELDS_LENGTH, VARIABLES_LENGTH, CLASSES, INTERFACES, INNER_CLASSES, FORS, WHILES, IFS,
+            ELSES, ELSE_IFS, TERNARY, STRING_CONSTANTS, INT_CONSTANTS, CHAR_CONSTANTS, LAMBDAS, BREAKS, CONTINUES,
+            NULLS, LINE_COMMENTS, BLOCK_COMMENTS, JAVA_DOC_COMMENTS, TOTAL_LENGTH, LINES, TABS, SPACES, EMPTY_LINES,
+            WHITESPACE_CHARS
+    ));
+
+    private final Set<String> STRING_FIELDS = new HashSet<>(Arrays.asList(
+            PATH, AST
+    ));
+
+    private final Set<String> NOMINAL_FIELDS = new HashSet<>(Arrays.asList(
+            TABS_LEAD_LINES, PUNCTUATION_BEFORE_BRACE
+    ));
+
+    private final Map<String, Object> values = new HashMap<>();
+
+    public Object get(String field) {
+        return values.get(field);
+    }
+
+    public void addToIntField(String field, int val) {
+        if (!INT_FIELDS.contains(field)) {
+            throw new IllegalArgumentException("Unable to add, " + field + " isn't an int field.");
+        }
+        int updatedVal = (Integer) values.get(field) + val;
+        values.put(field, updatedVal);
+    }
+
+    public void addToStringField(String field, String val) {
+        if (!STRING_FIELDS.contains(field)) {
+            throw new IllegalArgumentException("Unable to add, " + field + " isn't a string field.");
+        }
+        String updatedVal = values.get(field) + val;
+        values.put(field, updatedVal);
+    }
+
+    public void setNominalField(String field, String val) {
+        if (!NOMINAL_FIELDS.contains(field)) {
+            throw new IllegalArgumentException("Unable to set, " + field + " isn't a nominal field.");
+        }
+        values.put(field, val);
+    }
+
+    public StatisticsHolder() {
+        for (String field : INT_FIELDS) {
+            values.put(field, 0);
+        }
+
+        for (String field : STRING_FIELDS) {
+            values.put(field, "");
+        }
+
+        for (String field : NOMINAL_FIELDS) {
+            values.put(field, "NaN");
+        }
+    }
 
     /**
      * Path to file.
      */
-    public String PATH = "Path";
+    public static String PATH = "Path";
     /**
      * Visual representation of AST in xml-format.
      */
-    public String AST = "Ast";
+    public static String AST = "Ast";
     /**
      * Number of methods.
      */
