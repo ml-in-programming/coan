@@ -7,18 +7,31 @@ import java.util.*;
  * named SYMBOL with value "Symbol" and add it to INT_FEATURES).
  */
 public class StatisticsHolder {
+    public static final List<String> JAVA_KEYWORDS = new ArrayList<>(Arrays.asList(
+            "abstract", "continue", "for", "new", "switch",
+            "assert", "default", "goto", "package", "synchronized",
+            "boolean", "do", "if", "private", "this",
+            "break", "double", "implements", "protected", "throw",
+            "byte", "else", "import", "public", "throws",
+            "case", "enum", "instanceof", "return", "transient",
+            "catch", "extends", "int", "short", "try",
+            "char", "final", "interface", "static", "void",
+            "class", "finally", "long", "strictfp", "volatile",
+            "const", "float", "native", "super", "while"
+    ));
+
     /**
      * Path to file.
      */
-    public static String PATH = "Path";
+    public static final String PATH = "Path";
     /**
      * Project's name.
      */
-    public static String PROJECT = "Project";
+    public static final String PROJECT = "Project";
     /**
      * Visual representation of AST in xml-format.
      */
-    public static String AST = "Ast";
+    public static final String AST = "Ast";
     /**
      * Number of methods.
      */
@@ -27,14 +40,18 @@ public class StatisticsHolder {
      * Number of non-whitespace characters in methods. Includes methods' declarations.
      */
     public static final String METHODS_CHARACTERS = "MethodsCharacters";
+    public static final String AVG_METHODS_CHARACTERS = "AvgMethodsCharacters";
     /**
      * Number of lines in methods. Includes methods' declarations.
      */
     public static final String METHODS_LINES = "MethodsLines";
+    public static final String AVG_METHODS_LINES = "AvgMethodsLines";
     /**
      * Number of parameters in methods.
      */
     public static final String METHODS_PARAMETERS = "MethodsParameters";
+    public static final String AVG_METHODS_PARAMETERS = "AvgMethodsParameters";
+    public static final String STD_DEV_METHODS_PARAMETERS = "StdDevMethodsParameters";
     /**
      * Number of fields.
      */
@@ -43,10 +60,12 @@ public class StatisticsHolder {
      * Number of public fields.
      */
     public static final String PRIVATE_FIELDS = "PrivateFields";
+    public static final String RATIO_PRIVATE_FIELDS = "RatioPrivateFields";
     /**
      * Number of public fields.
      */
     public static final String PUBLIC_FIELDS = "PublicFields";
+    public static final String RATIO_PUBLIC_FIELDS = "RatioPublicFields";
     /**
      * Number of local variables.
      */
@@ -55,10 +74,12 @@ public class StatisticsHolder {
      * Total length of all fields.
      */
     public static final String FIELDS_LENGTH = "FieldsLength";
+    public static final String AVG_FIELDS_LENGTH = "AvgFieldsLength";
     /**
      * Total length of all local variables.
      */
     public static final String VARIABLES_LENGTH = "VariablesLength";
+    public static final String AVG_VARIABLES_LENGTH = "AvgVariablesLength";
     /**
      * Number of classes.
      */
@@ -75,66 +96,82 @@ public class StatisticsHolder {
      * Number of for cycles.
      */
     public static final String FORS = "For";
+    public static final String RATIO_FORS = "RatioFor";
     /**
      * Number of while cycles.
      */
     public static final String WHILES = "While";
+    public static final String RATIO_WHILES = "AvgWhile";
     /**
      * Number of if statements.
      */
     public static final String IFS = "If";
+    public static final String RATIO_IFS = "AvgIf";
     /**
      * Number of else statements.
      */
     public static final String ELSES = "Else";
+    public static final String RATIO_ELSES = "AvgElse";
     /**
      * Number of "else if" statements.
      */
     public static final String ELSE_IFS = "ElseIf";
+    public static final String RATIO_ELSE_IFS = "AvgElseIf";
     /**
      * Number of ternary operators (? :).
      */
     public static final String TERNARY = "TernaryOperator";
+    public static final String RATIO_TERNARY = "AvgTernaryOperator";
     /**
      * Number of string literals.
      */
     public static final String STRING_CONSTANTS = "StringConstant";
+    public static final String RATIO_STRING_CONSTANTS = "AvgStringConstant";
     /**
      * Number of integer constants.
      */
     public static final String INT_CONSTANTS = "IntConstant";
+    public static final String RATIO_INT_CONSTANTS = "AvgIntConstant";
     /**
      * Number of char constants.
      */
     public static final String CHAR_CONSTANTS = "CharConstant";
+    public static final String RATIO_CHAR_CONSTANTS = "AvgCharConstant";
     /**
      * Number of lambda functions.
      */
     public static final String LAMBDAS = "Lambda";
+    public static final String RATIO_LAMBDAS = "AvgLambda";
     /**
      * Number of break statements.
      */
     public static final String BREAKS = "Break";
+    public static final String RATIO_BREAKS = "AvgBreak";
     /**
      * Number of continue statements.
      */
     public static final String CONTINUES = "Continue";
+    public static final String RATIO_CONTINUES = "AvgContinue";
     /**
      * Number of nulls.
      */
     public static final String NULLS = "Null";
+    public static final String RATIO_NULLS = "AvgNull";
     /**
      * Number of comments starting with //
      */
     public static final String LINE_COMMENTS = "LineComment";
+    public static final String RATIO_LINE_COMMENTS = "AvgLineComment";
     /**
      * Number of comments starting with /*.
      */
     public static final String BLOCK_COMMENTS = "BlockComment";
+    public static final String RATIO_BLOCK_COMMENTS = "AvgBlockComment";
     /**
      * Number of java-doc comments.
      */
     public static final String JAVA_DOC_COMMENTS = "JavaDocComment";
+    public static final String RATIO_JAVA_DOC_COMMENTS = "AvgJavaDocComment";
     /**
      * Length of file in characters.
      */
@@ -143,14 +180,18 @@ public class StatisticsHolder {
      * Length of file in lines.
      */
     public static final String LINES = "Line";
+    public static final String AVG_LINE_LENGTH = "AvgLineLength";
+    public static final String STD_DEV_LINE_LENGTH = "StdDevLineLength";
     /**
      * Number of \t symbols in file.
      */
     public static final String TABS = "Tab";
+    public static final String RATIO_TABS = "RatioTab";
     /**
-     * Length of spaces in file.
+     * Number of spaces in file.
      */
     public static final String SPACES = "Space";
+    public static final String RATIO_SPACES = "RatioSpace";
     /**
      * True if most of lines in the file start with tabs opposed to spaces .
      */
@@ -164,10 +205,12 @@ public class StatisticsHolder {
      * Number of empty lines.
      */
     public static final String EMPTY_LINES = "EmptyLine";
+    public static final String RATIO_EMPTY_LINES = "RatioEmptyLine";
     /**
      * Number of whitespace characters.
      */
     public static final String WHITESPACE_CHARS = "Whitespace";
+    public static final String RATIO_WHITESPACE_CHARS = "RatioWhitespace";
 
     public enum ValueType {
         INT,
@@ -191,6 +234,41 @@ public class StatisticsHolder {
             TABS_LEAD_LINES, PUNCTUATION_BEFORE_BRACE
     ));
 
+    private static final Set<String> RATIO_TO_TOTAL_FEATURES = new HashSet<>(Arrays.asList(
+            RATIO_BLOCK_COMMENTS, RATIO_BREAKS, RATIO_CHAR_CONSTANTS, RATIO_CONTINUES, RATIO_ELSE_IFS, RATIO_ELSES,
+            RATIO_FORS, RATIO_IFS, RATIO_INT_CONSTANTS, RATIO_JAVA_DOC_COMMENTS, RATIO_LAMBDAS,
+            RATIO_LINE_COMMENTS, RATIO_NULLS, RATIO_SPACES, RATIO_STRING_CONSTANTS, RATIO_TABS, RATIO_TERNARY,
+            RATIO_WHILES, RATIO_WHITESPACE_CHARS
+    ));
+
+    private static final Set<String> RATIO_TO_FIELDS_FEATURES = new HashSet<>(Arrays.asList(
+            RATIO_PRIVATE_FIELDS, RATIO_PUBLIC_FIELDS
+    ));
+
+    private static final Set<String> RATIO_TO_LINES_FEATURES = new HashSet<>(Arrays.asList(
+            RATIO_EMPTY_LINES
+    ));
+
+    private static final Set<String> AVG_TO_LINES_FEATURES = new HashSet<>(Arrays.asList(
+            AVG_LINE_LENGTH
+    ));
+
+    private static final Set<String> AVG_TO_FIELDS_FEATURES = new HashSet<>(Arrays.asList(
+            AVG_FIELDS_LENGTH
+    ));
+
+    private static final Set<String> AVG_TO_VARIABLES_FEATURES = new HashSet<>(Arrays.asList(
+            AVG_VARIABLES_LENGTH
+    ));
+
+    private static final Set<String> AVG_TO_METHODS_FEATURES = new HashSet<>(Arrays.asList(
+            AVG_METHODS_CHARACTERS, AVG_METHODS_LINES, AVG_METHODS_PARAMETERS
+    ));
+
+    private static final Set<String> STD_DEV_FEATURES = new HashSet<>(Arrays.asList(
+            STD_DEV_LINE_LENGTH, STD_DEV_METHODS_PARAMETERS
+    ));
+
     private static final List<String> ALL_FEATURES = new ArrayList<>();
 
     private final Map<String, Object> values = new HashMap<>();
@@ -199,21 +277,21 @@ public class StatisticsHolder {
         if (!INT_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't an int field.");
         }
-        return (Integer)values.get(field);
+        return (Integer) values.get(field);
     }
 
     public String getStringFeature(String field) {
         if (!STRING_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a string field.");
         }
-        return (String)values.get(field);
+        return (String) values.get(field);
     }
 
     public String getNominalFeature(String field) {
         if (!NOMINAL_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a nominal field.");
         }
-        return (String)values.get(field);
+        return (String) values.get(field);
     }
 
     public void addToIntFeature(String field, int val) {
