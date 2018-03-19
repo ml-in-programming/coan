@@ -1,3 +1,4 @@
+import javafx.beans.binding.DoubleExpression;
 import statitics.StatisticsCollector;
 import statitics.StatisticsHolder;
 
@@ -55,6 +56,24 @@ public class Main {
                     return stats.getStringFeature(feature);
                 case NOMINAL:
                     return stats.getNominalFeature(feature);
+                case AVG_LINES:
+                    return Double.toString(stats.getAvgLinesFeature(feature));
+                case AVG_FIELDS:
+                    return Double.toString(stats.getAvgFieldsFeature(feature));
+                case AVG_METHODS:
+                    return Double.toString(stats.getAvgMethodsFeature(feature));
+                case AVG_VARIABLES:
+                    return Double.toString(stats.getAvgVariablesFeature(feature));
+                case STD_DEV_LINES:
+                    return Double.toString(stats.getStdDevLinesFeature(feature));
+                case STD_DEV_METHODS:
+                    return Double.toString(stats.getStdDevMethodsFeature(feature));
+                case RATIO_FIELDS:
+                    return Double.toString(stats.getRatioFieldsFeature(feature));
+                case RATIO_LINES:
+                    return Double.toString(stats.getRatioLinesFeature(feature));
+                case RATIO_TOTAL:
+                    return Double.toString(stats.getRatioTotalFeature(feature));
                 default:
                     return "NaN";
             }

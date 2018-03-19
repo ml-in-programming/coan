@@ -125,7 +125,7 @@ public class CompilationUnitCollector {
             if (declaration.isPublic()) {
                 stats.addToIntFeature(PUBLIC_FIELDS, numberOfDeclared);
             }
-            stats.addToIntFeature(VARIABLES_LENGTH, getVariablesLength(declaration.getVariables()));
+            stats.addToIntFeature(FIELDS_LENGTH, getVariablesLength(declaration.getVariables()));
             super.visit(declaration, stats);
         }
 

@@ -101,77 +101,77 @@ public class StatisticsHolder {
      * Number of while cycles.
      */
     public static final String WHILES = "While";
-    public static final String RATIO_WHILES = "AvgWhile";
+    public static final String RATIO_WHILES = "RatioWhile";
     /**
      * Number of if statements.
      */
     public static final String IFS = "If";
-    public static final String RATIO_IFS = "AvgIf";
+    public static final String RATIO_IFS = "RatioIf";
     /**
      * Number of else statements.
      */
     public static final String ELSES = "Else";
-    public static final String RATIO_ELSES = "AvgElse";
+    public static final String RATIO_ELSES = "RatioElse";
     /**
      * Number of "else if" statements.
      */
     public static final String ELSE_IFS = "ElseIf";
-    public static final String RATIO_ELSE_IFS = "AvgElseIf";
+    public static final String RATIO_ELSE_IFS = "RatioElseIf";
     /**
      * Number of ternary operators (? :).
      */
     public static final String TERNARY = "TernaryOperator";
-    public static final String RATIO_TERNARY = "AvgTernaryOperator";
+    public static final String RATIO_TERNARY = "RatioTernaryOperator";
     /**
      * Number of string literals.
      */
     public static final String STRING_CONSTANTS = "StringConstant";
-    public static final String RATIO_STRING_CONSTANTS = "AvgStringConstant";
+    public static final String RATIO_STRING_CONSTANTS = "RatioStringConstant";
     /**
      * Number of integer constants.
      */
     public static final String INT_CONSTANTS = "IntConstant";
-    public static final String RATIO_INT_CONSTANTS = "AvgIntConstant";
+    public static final String RATIO_INT_CONSTANTS = "RatioIntConstant";
     /**
      * Number of char constants.
      */
     public static final String CHAR_CONSTANTS = "CharConstant";
-    public static final String RATIO_CHAR_CONSTANTS = "AvgCharConstant";
+    public static final String RATIO_CHAR_CONSTANTS = "RatioCharConstant";
     /**
      * Number of lambda functions.
      */
     public static final String LAMBDAS = "Lambda";
-    public static final String RATIO_LAMBDAS = "AvgLambda";
+    public static final String RATIO_LAMBDAS = "RatioLambda";
     /**
      * Number of break statements.
      */
     public static final String BREAKS = "Break";
-    public static final String RATIO_BREAKS = "AvgBreak";
+    public static final String RATIO_BREAKS = "RatioBreak";
     /**
      * Number of continue statements.
      */
     public static final String CONTINUES = "Continue";
-    public static final String RATIO_CONTINUES = "AvgContinue";
+    public static final String RATIO_CONTINUES = "RatioContinue";
     /**
      * Number of nulls.
      */
     public static final String NULLS = "Null";
-    public static final String RATIO_NULLS = "AvgNull";
+    public static final String RATIO_NULLS = "RatioNull";
     /**
      * Number of comments starting with //
      */
     public static final String LINE_COMMENTS = "LineComment";
-    public static final String RATIO_LINE_COMMENTS = "AvgLineComment";
+    public static final String RATIO_LINE_COMMENTS = "RatioLineComment";
     /**
      * Number of comments starting with /*.
      */
     public static final String BLOCK_COMMENTS = "BlockComment";
-    public static final String RATIO_BLOCK_COMMENTS = "AvgBlockComment";
+    public static final String RATIO_BLOCK_COMMENTS = "RatioBlockComment";
     /**
      * Number of java-doc comments.
      */
     public static final String JAVA_DOC_COMMENTS = "JavaDocComment";
-    public static final String RATIO_JAVA_DOC_COMMENTS = "AvgJavaDocComment";
+    public static final String RATIO_JAVA_DOC_COMMENTS = "RatioJavaDocComment";
     /**
      * Length of file in characters.
      */
@@ -292,6 +292,7 @@ public class StatisticsHolder {
         if (!INT_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't an int field.");
         }
+        if (!values.containsKey(field)) return 0;
         return (Integer) values.get(field);
     }
 
@@ -299,6 +300,7 @@ public class StatisticsHolder {
         if (!STRING_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a string field.");
         }
+        if (!values.containsKey(field)) return "";
         return (String) values.get(field);
     }
 
@@ -306,6 +308,7 @@ public class StatisticsHolder {
         if (!NOMINAL_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a nominal field.");
         }
+        if (!values.containsKey(field)) return "NaN";
         return (String) values.get(field);
     }
 
@@ -314,7 +317,11 @@ public class StatisticsHolder {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a ratio to total field.");
         }
         String ancField = field.substring(5); // drop ratio
-        return (double) values.get(ancField) / (double) values.get(TOTAL_LENGTH);
+        int total = getIntFeature(TOTAL_LENGTH);
+        if (total == 0) {
+            return 0;
+        }
+        return getIntFeature(ancField) * 1. / getIntFeature(TOTAL_LENGTH);
     }
 
     public double getRatioLinesFeature(String field) {
@@ -322,7 +329,11 @@ public class StatisticsHolder {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a ratio to lines field.");
         }
         String ancField = field.substring(5); // drop ratio
-        return (double) values.get(ancField) / (double) values.get(LINES);
+        int total = getIntFeature(LINES);
+        if (total == 0) {
+            return 0;
+        }
+        return getIntFeature(ancField) * 1. / getIntFeature(LINES);
     }
 
     public double getRatioFieldsFeature(String field) {
@@ -330,7 +341,11 @@ public class StatisticsHolder {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a ratio to fields field.");
         }
         String ancField = field.substring(5); // drop ratio
-        return (double) values.get(ancField) / (double) values.get(FIELDS);
+        int total = getIntFeature(FIELDS);
+        if (total == 0) {
+            return 0;
+        }
+        return getIntFeature(ancField) * 1. / getIntFeature(FIELDS);
     }
 
     public double getAvgFieldsFeature(String field) {
@@ -338,7 +353,11 @@ public class StatisticsHolder {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't an average fields field.");
         }
         String ancField = field.substring(3); // drop avg
-        return (double) values.get(ancField) / (double) values.get(FIELDS);
+        int total = getIntFeature(FIELDS);
+        if (total == 0) {
+            return 0;
+        }
+        return getIntFeature(ancField) * 1. / getIntFeature(FIELDS);
     }
 
     public double getAvgVariablesFeature(String field) {
@@ -346,15 +365,22 @@ public class StatisticsHolder {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't an average variables field.");
         }
         String ancField = field.substring(3); // drop avg
-        return (double) values.get(ancField) / (double) values.get(LOCAL_VARIABLES);
+        int total = getIntFeature(LOCAL_VARIABLES);
+        if (total == 0) {
+            return 0;
+        }
+        return getIntFeature(ancField) * 1. / getIntFeature(LOCAL_VARIABLES);
     }
 
     public double getAvgLinesFeature(String field) {
         if (!AVG_TO_LINES_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't an average lines field.");
         }
-        String ancField = field.substring(3); // drop avg
-        return (double) values.get(ancField) / (double) values.get(LINES);
+        int total = getIntFeature(LINES);
+        if (total == 0) {
+            return 0;
+        }
+        return getIntFeature(TOTAL_LENGTH) * 1. / getIntFeature(LINES);
     }
 
     public double getAvgMethodsFeature(String field) {
@@ -362,17 +388,19 @@ public class StatisticsHolder {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't an average methods field.");
         }
         String ancField = field.substring(3); // drop avg
-        return (double) values.get(ancField) / (double) values.get(METHODS);
+        int total = getIntFeature(METHODS);
+        if (total == 0) {
+            return 0;
+        }
+        return getIntFeature(ancField) * 1. / getIntFeature(METHODS);
     }
 
     public double getStdDevLinesFeature(String field) {
         if (!STD_DEV_LINES_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a std dev lines field.");
         }
-        String totalField = field.substring(6); // drop stdDev
-        String avgField = "Avg" + field; // make avg field
-        int total = getIntFeature(totalField);
-        double avg = getAvgLinesFeature(avgField);
+        int total = getIntFeature(LINES);
+        double avg = getAvgLinesFeature(AVG_LINE_LENGTH);
         if (total <= 1) return 0;
         double sum = 0;
         for (int len : linesLengths) {
@@ -385,10 +413,8 @@ public class StatisticsHolder {
         if (!STD_DEV_METHODS_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a std dev methods field.");
         }
-        String totalField = field.substring(6); // drop stdDev
-        String avgField = "Avg" + field; // make avg field
-        int total = getIntFeature(totalField);
-        double avg = getAvgMethodsFeature(avgField);
+        int total = getIntFeature(METHODS);
+        double avg = getAvgMethodsFeature(AVG_METHODS_PARAMETERS);
         if (total <= 1) return 0;
         double sum = 0;
         for (int len : methodsParameters) {
@@ -441,9 +467,19 @@ public class StatisticsHolder {
     }
 
     static {
-        ALL_FEATURES.addAll(INT_FEATURES);
+    //    ALL_FEATURES.addAll(INT_FEATURES);
+        ALL_FEATURES.addAll(Arrays.asList(METHODS, FIELDS, LOCAL_VARIABLES));
         ALL_FEATURES.addAll(STRING_FEATURES);
         ALL_FEATURES.addAll(NOMINAL_FEATURES);
+        ALL_FEATURES.addAll(AVG_TO_FIELDS_FEATURES);
+        ALL_FEATURES.addAll(AVG_TO_LINES_FEATURES);
+        ALL_FEATURES.addAll(AVG_TO_METHODS_FEATURES);
+        ALL_FEATURES.addAll(AVG_TO_VARIABLES_FEATURES);
+        ALL_FEATURES.addAll(STD_DEV_LINES_FEATURES);
+        ALL_FEATURES.addAll(STD_DEV_METHODS_FEATURES);
+        ALL_FEATURES.addAll(RATIO_TO_FIELDS_FEATURES);
+        ALL_FEATURES.addAll(RATIO_TO_LINES_FEATURES);
+        ALL_FEATURES.addAll(RATIO_TO_TOTAL_FEATURES);
     }
 
     public StatisticsHolder() {
