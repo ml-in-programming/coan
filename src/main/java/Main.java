@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -74,6 +76,10 @@ public class Main {
                     return Double.toString(stats.getRatioLinesFeature(feature));
                 case RATIO_TOTAL:
                     return Double.toString(stats.getRatioTotalFeature(feature));
+                case AST_TYPE_TF:
+                    return Double.toString(stats.getAstTypeFrequency(feature));
+                case AST_AVG_DEPTH:
+                    return Double.toString(stats.getAstAvgDepth(feature));
                 default:
                     return "NaN";
             }
@@ -99,9 +105,29 @@ public class Main {
         }
     }
 
-    private static List<String> getFeatures() {
+    private static List<String> collectTypesFromFiles(File[] subDirs) {
+        Set<String> types = new HashSet<>();
+        for (File subDir : subDirs) {
+            if (subDir.isDirectory()) {
+                System.out.println("Collecting types from: " + subDir.getName());
+                try {
+                    types.addAll(StatisticsCollector.collectTypesFromProject(subDir.toPath()));
+                } catch (Exception e) {
+                    System.out.println("Error occurred during input/output");
+                }
+            }
+        }
+        return new ArrayList<>(types);
+    }
+
+    private static List<String> getFeatures(File[] subDirs) {
         List<String> features = new ArrayList<>(StatisticsHolder.getListOfFeatures());
         features.remove(StatisticsHolder.AST);
+        List<String> types = collectTypesFromFiles(subDirs);
+        types.forEach(type -> {
+            features.add(StatisticsHolder.PREFIX_AST_AVG_DEPTH + type);
+            features.add(StatisticsHolder.PREFIX_AST_TYPE_TF + type);
+        });
         return features;
     }
 
@@ -111,7 +137,7 @@ public class Main {
         File[] subDirs = repsDirectory.listFiles();
 
         PrintWriter writer = new PrintWriter(dataFile, "UTF-8");
-        List<String> features = getFeatures();
+        List<String> features = getFeatures(subDirs);
         writeCsvHeader(writer, features);
         collectAndWriteStats(writer, subDirs, features);
         writer.close();

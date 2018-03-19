@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class StatisticsCollector {
@@ -47,6 +49,20 @@ public class StatisticsCollector {
         return stats;
     }
 
+    public static Set<String> collectTypesFromProject(Path path) throws IOException {
+        Set<String> types = new HashSet<>();
+        Files.walk(path).forEach(p -> {
+            if (p.getFileName().toString().endsWith(".java")) {
+                try {
+                    types.addAll(collectTypesFromFile(p));
+                } catch(Exception e) {
+                    System.out.println("Unable to read file " + path.toString());
+                }
+            }
+        });
+        return types;
+    }
+
     public static StatisticsHolder collectFromFile(Path path) throws Exception {
         return collectFromFile(path, m -> true);
     }
@@ -65,6 +81,19 @@ public class StatisticsCollector {
 
     public static void collectFromFile(Path path, StatisticsHolder stats, Predicate<MethodDeclaration> filter)
             throws Exception {
+        String code = getCodeFromFile(path);
+        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnitCollector.getStatistics(cu, stats, filter);
+        LayoutCollector.getLayoutFeatures(code, stats);
+        AstFeaturesCollector.getStatistics(cu, stats);
+    }
+
+    public static Set<String> collectTypesFromFile(Path path) throws Exception {
+        CompilationUnit cu = JavaParser.parse(getCodeFromFile(path));
+        return AstFeaturesCollector.getNodeTypes(cu);
+    }
+
+    private static String getCodeFromFile(Path path) throws Exception {
         FileInputStream in = new FileInputStream(path.toString());
         int content;
         StringBuilder codeBuilder = new StringBuilder();
@@ -72,10 +101,6 @@ public class StatisticsCollector {
             // convert to char and display it
             codeBuilder.append((char) content);
         }
-        String code = codeBuilder.toString();
-        CompilationUnit cu = JavaParser.parse(code);
-        CompilationUnitCollector.getStatistics(cu, stats, filter);
-        LayoutCollector.getLayoutFeatures(code, stats);
-        AstFeaturesCollector.getStatistics(cu, stats);
+        return codeBuilder.toString();
     }
 }

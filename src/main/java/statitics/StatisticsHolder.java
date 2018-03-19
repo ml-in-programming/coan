@@ -7,6 +7,10 @@ import java.util.*;
  * named SYMBOL with value "Symbol" and add it to INT_FEATURES).
  */
 public class StatisticsHolder {
+
+    public static final String PREFIX_AST_AVG_DEPTH = "AstTypeAvgDepth";
+    public static final String PREFIX_AST_TYPE_TF = "AstTypeTF";
+
     public static final List<String> JAVA_KEYWORDS = new ArrayList<>(Arrays.asList(
             "abstract", "continue", "for", "new", "switch",
             "assert", "default", "goto", "package", "synchronized",
@@ -222,11 +226,11 @@ public class StatisticsHolder {
     /**
      * Frequency of nodes in AST by type.
      */
-    public final Map<String, Double> AST_TYPE_FREQUENCY = new HashMap<>();
+    private final Map<String, Double> AST_TYPE_FREQUENCY = new HashMap<>();
     /**
      * Average depth of nodes in AST by type.
      */
-    public final Map<String, Double> AST_TYPE_AVG_DEPTH = new HashMap<>();
+    private final Map<String, Double> AST_TYPE_AVG_DEPTH = new HashMap<>();
 
     public enum ValueType {
         INT,
@@ -238,7 +242,7 @@ public class StatisticsHolder {
         AVG_VARIABLES,
         AVG_METHODS,
         AVG_LINES,
-        STD_DEV_METHODS, STD_DEV_LINES, NOMINAL
+        STD_DEV_METHODS, STD_DEV_LINES, AST_TYPE_TF, AST_AVG_DEPTH, NOMINAL
     }
 
     private static final Set<String> INT_FEATURES = new HashSet<>(Arrays.asList(
@@ -439,6 +443,28 @@ public class StatisticsHolder {
         return Math.sqrt(sum / (total - 1));
     }
 
+    public double getAstTypeFrequency(String type) {
+        if (!type.startsWith(PREFIX_AST_TYPE_TF)) {
+            throw new IllegalArgumentException("Unable to get, " + type + " isn't an ast tf field.");
+        }
+        return AST_TYPE_FREQUENCY.getOrDefault(type, 0.);
+    }
+
+    public double getAstAvgDepth(String type) {
+        if (!type.startsWith(PREFIX_AST_AVG_DEPTH)) {
+            throw new IllegalArgumentException("Unable to get, " + type + " isn't an ast avg depth field.");
+        }
+        return AST_TYPE_AVG_DEPTH.getOrDefault(type, 0.);
+    }
+
+    public void putAstTypeFrequency(String type, double val) {
+        AST_TYPE_FREQUENCY.put(PREFIX_AST_TYPE_TF + type, val);
+    }
+
+    public void putAstAvgDepth(String type, double val) {
+        AST_TYPE_AVG_DEPTH.put(PREFIX_AST_AVG_DEPTH + type, val);
+    }
+
     public void addToIntFeature(String field, int val) {
         if (!INT_FEATURES.contains(field)) {
             throw new IllegalArgumentException("Unable to add, " + field + " isn't an int field.");
@@ -486,6 +512,8 @@ public class StatisticsHolder {
         if (AVG_TO_METHODS_FEATURES.contains(field)) return ValueType.AVG_METHODS;
         if (STD_DEV_METHODS_FEATURES.contains(field)) return ValueType.STD_DEV_METHODS;
         if (STD_DEV_LINES_FEATURES.contains(field)) return ValueType.STD_DEV_LINES;
+        if (field.startsWith(PREFIX_AST_AVG_DEPTH)) return ValueType.AST_AVG_DEPTH;
+        if (field.startsWith(PREFIX_AST_TYPE_TF)) return ValueType.AST_TYPE_TF;
         return null;
     }
 
