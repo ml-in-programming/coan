@@ -76,5 +76,6 @@ public class StatisticsCollector {
         CompilationUnit cu = JavaParser.parse(code);
         CompilationUnitCollector.getStatistics(cu, stats, filter);
         LayoutCollector.getLayoutFeatures(code, stats);
+        AstFeaturesCollector.getStatistics(cu, stats);
     }
 }

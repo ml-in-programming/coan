@@ -211,6 +211,22 @@ public class StatisticsHolder {
      */
     public static final String WHITESPACE_CHARS = "Whitespace";
     public static final String RATIO_WHITESPACE_CHARS = "RatioWhitespace";
+    /**
+     * Max depth of nodes in AST.
+     */
+    public static final String AST_MAX_DEPTH = "AstMaxDepth";
+    /**
+     * Number of nodes in AST.
+     */
+    public static final String AST_TOTAL = "AstTotalNodes";
+    /**
+     * Frequency of nodes in AST by type.
+     */
+    public final Map<String, Double> AST_TYPE_FREQUENCY = new HashMap<>();
+    /**
+     * Average depth of nodes in AST by type.
+     */
+    public final Map<String, Double> AST_TYPE_AVG_DEPTH = new HashMap<>();
 
     public enum ValueType {
         INT,
@@ -230,7 +246,7 @@ public class StatisticsHolder {
             LOCAL_VARIABLES, FIELDS_LENGTH, VARIABLES_LENGTH, CLASSES, INTERFACES, INNER_CLASSES, FORS, WHILES, IFS,
             ELSES, ELSE_IFS, TERNARY, STRING_CONSTANTS, INT_CONSTANTS, CHAR_CONSTANTS, LAMBDAS, BREAKS, CONTINUES,
             NULLS, LINE_COMMENTS, BLOCK_COMMENTS, JAVA_DOC_COMMENTS, TOTAL_LENGTH, LINES, TABS, SPACES, EMPTY_LINES,
-            WHITESPACE_CHARS
+            WHITESPACE_CHARS, AST_MAX_DEPTH, AST_TOTAL
     ));
 
     private static final Set<String> STRING_FEATURES = new HashSet<>(Arrays.asList(
@@ -446,6 +462,13 @@ public class StatisticsHolder {
         values.put(field, val);
     }
 
+    public void setIntFeature(String field, int val) {
+        if (!INT_FEATURES.contains(field)) {
+            throw new IllegalArgumentException("Unable to add, " + field + " isn't an int field.");
+        }
+        values.put(field, val);
+    }
+
     public static List<String> getListOfFeatures() {
         return ALL_FEATURES;
     }
@@ -468,7 +491,7 @@ public class StatisticsHolder {
 
     static {
     //    ALL_FEATURES.addAll(INT_FEATURES);
-        ALL_FEATURES.addAll(Arrays.asList(METHODS, FIELDS, LOCAL_VARIABLES));
+        ALL_FEATURES.addAll(Arrays.asList(METHODS, FIELDS, LOCAL_VARIABLES, AST_MAX_DEPTH));
         ALL_FEATURES.addAll(STRING_FEATURES);
         ALL_FEATURES.addAll(NOMINAL_FEATURES);
         ALL_FEATURES.addAll(AVG_TO_FIELDS_FEATURES);
