@@ -215,7 +215,14 @@ public class StatisticsHolder {
     public enum ValueType {
         INT,
         STRING,
-        NOMINAL
+        RATIO_TOTAL,
+        RATIO_LINES,
+        RATIO_FIELDS,
+        AVG_FIELDS,
+        AVG_VARIABLES,
+        AVG_METHODS,
+        AVG_LINES,
+        STD_DEV_METHODS, STD_DEV_LINES, NOMINAL
     }
 
     private static final Set<String> INT_FEATURES = new HashSet<>(Arrays.asList(
@@ -265,13 +272,21 @@ public class StatisticsHolder {
             AVG_METHODS_CHARACTERS, AVG_METHODS_LINES, AVG_METHODS_PARAMETERS
     ));
 
-    private static final Set<String> STD_DEV_FEATURES = new HashSet<>(Arrays.asList(
-            STD_DEV_LINE_LENGTH, STD_DEV_METHODS_PARAMETERS
+    private static final Set<String> STD_DEV_LINES_FEATURES = new HashSet<>(Arrays.asList(
+            STD_DEV_LINE_LENGTH
+    ));
+
+    private static final Set<String> STD_DEV_METHODS_FEATURES = new HashSet<>(Arrays.asList(
+            STD_DEV_METHODS_PARAMETERS
     ));
 
     private static final List<String> ALL_FEATURES = new ArrayList<>();
 
     private final Map<String, Object> values = new HashMap<>();
+
+    public final List<Integer> linesLengths = new ArrayList<>();
+
+    public final List<Integer> methodsParameters = new ArrayList<>();
 
     public int getIntFeature(String field) {
         if (!INT_FEATURES.contains(field)) {
@@ -292,6 +307,94 @@ public class StatisticsHolder {
             throw new IllegalArgumentException("Unable to get, " + field + " isn't a nominal field.");
         }
         return (String) values.get(field);
+    }
+
+    public double getRatioTotalFeature(String field) {
+        if (!RATIO_TO_TOTAL_FEATURES.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't a ratio to total field.");
+        }
+        String ancField = field.substring(5); // drop ratio
+        return (double) values.get(ancField) / (double) values.get(TOTAL_LENGTH);
+    }
+
+    public double getRatioLinesFeature(String field) {
+        if (!RATIO_TO_LINES_FEATURES.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't a ratio to lines field.");
+        }
+        String ancField = field.substring(5); // drop ratio
+        return (double) values.get(ancField) / (double) values.get(LINES);
+    }
+
+    public double getRatioFieldsFeature(String field) {
+        if (!RATIO_TO_FIELDS_FEATURES.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't a ratio to fields field.");
+        }
+        String ancField = field.substring(5); // drop ratio
+        return (double) values.get(ancField) / (double) values.get(FIELDS);
+    }
+
+    public double getAvgFieldsFeature(String field) {
+        if (!AVG_TO_FIELDS_FEATURES.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't an average fields field.");
+        }
+        String ancField = field.substring(3); // drop avg
+        return (double) values.get(ancField) / (double) values.get(FIELDS);
+    }
+
+    public double getAvgVariablesFeature(String field) {
+        if (!AVG_TO_VARIABLES_FEATURES.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't an average variables field.");
+        }
+        String ancField = field.substring(3); // drop avg
+        return (double) values.get(ancField) / (double) values.get(LOCAL_VARIABLES);
+    }
+
+    public double getAvgLinesFeature(String field) {
+        if (!AVG_TO_LINES_FEATURES.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't an average lines field.");
+        }
+        String ancField = field.substring(3); // drop avg
+        return (double) values.get(ancField) / (double) values.get(LINES);
+    }
+
+    public double getAvgMethodsFeature(String field) {
+        if (!AVG_TO_METHODS_FEATURES.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't an average methods field.");
+        }
+        String ancField = field.substring(3); // drop avg
+        return (double) values.get(ancField) / (double) values.get(METHODS);
+    }
+
+    public double getStdDevLinesFeature(String field) {
+        if (!STD_DEV_LINES_FEATURES.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't a std dev lines field.");
+        }
+        String totalField = field.substring(6); // drop stdDev
+        String avgField = "Avg" + field; // make avg field
+        int total = getIntFeature(totalField);
+        double avg = getAvgLinesFeature(avgField);
+        if (total <= 1) return 0;
+        double sum = 0;
+        for (int len : linesLengths) {
+            sum += (len - avg) * (len - avg);
+        }
+        return Math.sqrt(sum / (total - 1));
+    }
+
+    public double getStdDevMethodsFeature(String field) {
+        if (!STD_DEV_METHODS_FEATURES.contains(field)) {
+            throw new IllegalArgumentException("Unable to get, " + field + " isn't a std dev methods field.");
+        }
+        String totalField = field.substring(6); // drop stdDev
+        String avgField = "Avg" + field; // make avg field
+        int total = getIntFeature(totalField);
+        double avg = getAvgMethodsFeature(avgField);
+        if (total <= 1) return 0;
+        double sum = 0;
+        for (int len : methodsParameters) {
+            sum += (len - avg) * (len - avg);
+        }
+        return Math.sqrt(sum / (total - 1));
     }
 
     public void addToIntFeature(String field, int val) {
@@ -325,6 +428,15 @@ public class StatisticsHolder {
         if (INT_FEATURES.contains(field)) return ValueType.INT;
         if (STRING_FEATURES.contains(field)) return ValueType.STRING;
         if (NOMINAL_FEATURES.contains(field)) return ValueType.NOMINAL;
+        if (RATIO_TO_TOTAL_FEATURES.contains(field)) return ValueType.RATIO_TOTAL;
+        if (RATIO_TO_LINES_FEATURES.contains(field)) return ValueType.RATIO_LINES;
+        if (RATIO_TO_FIELDS_FEATURES.contains(field)) return ValueType.RATIO_FIELDS;
+        if (AVG_TO_FIELDS_FEATURES.contains(field)) return ValueType.AVG_FIELDS;
+        if (AVG_TO_VARIABLES_FEATURES.contains(field)) return ValueType.AVG_VARIABLES;
+        if (AVG_TO_LINES_FEATURES.contains(field)) return ValueType.AVG_LINES;
+        if (AVG_TO_METHODS_FEATURES.contains(field)) return ValueType.AVG_METHODS;
+        if (STD_DEV_METHODS_FEATURES.contains(field)) return ValueType.STD_DEV_METHODS;
+        if (STD_DEV_LINES_FEATURES.contains(field)) return ValueType.STD_DEV_LINES;
         return null;
     }
 

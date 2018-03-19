@@ -99,6 +99,7 @@ public class CompilationUnitCollector {
             stats.addToIntFeature(METHODS_CHARACTERS, method.toString().replaceAll("\\s+", "").length());
             stats.addToIntFeature(METHODS_LINES, StringUtils.countMatches(method.toString(), "\n") + 1);
             stats.addToIntFeature(METHODS_PARAMETERS, method.getParameters().size());
+            stats.methodsParameters.add(method.getParameters().size());
             super.visit(method, stats);
         }
 

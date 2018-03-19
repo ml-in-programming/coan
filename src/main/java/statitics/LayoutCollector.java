@@ -8,6 +8,9 @@ public class LayoutCollector {
 
     public static void getLayoutFeatures(String file, StatisticsHolder stats) {
         String[] lines = file.split("\n");
+        for (String line : lines) {
+            stats.linesLengths.add(line.length());
+        }
         stats.addToIntFeature(TOTAL_LENGTH, file.length());
         stats.addToIntFeature(SPACES, StringUtils.countMatches(file, " "));
         stats.addToIntFeature(TABS, StringUtils.countMatches(file, "\t"));
