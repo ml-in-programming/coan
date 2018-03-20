@@ -43,6 +43,8 @@ public class StatisticsCollector {
                     stats.add(stat);
                 } catch(Exception e) {
                     System.out.println("Unable to read file " + path.toString());
+                } catch(Error e) {
+                    System.out.println("JavaParser failed to parse something at " + path.toString() + " :(");
                 }
             }
         });
@@ -56,7 +58,7 @@ public class StatisticsCollector {
                 try {
                     types.addAll(collectTypesFromFile(p));
                 } catch(Exception e) {
-                    System.out.println("Unable to read file " + path.toString());
+                    System.out.println("Unable to read file " + p.toString());
                 }
             }
         });
