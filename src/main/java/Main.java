@@ -1,4 +1,3 @@
-import javafx.beans.binding.DoubleExpression;
 import statitics.StatisticsCollector;
 import statitics.StatisticsHolder;
 
@@ -19,8 +18,8 @@ import java.util.stream.Collectors;
  */
 public class Main {
 
-    private static final String PROJECT = "github-java-corpus-sample";
-    private static final String ROOT = "/home/egor/Work/testData/";
+    private static final String PROJECT = "github-java-corpus";
+    private static final String ROOT = "/home/egor/PycharmProjects/stan/";
 
     /**
      * Path to file where .csv with stats should be saved.
@@ -91,9 +90,11 @@ public class Main {
      */
     private static void collectAndWriteStats(PrintWriter writer, File[] subDirs, List<String> features)
             throws IOException {
+        int total = subDirs.length;
+        int now = 1;
         for (File subDir : subDirs) {
             if (subDir.isDirectory()) {
-                System.out.println("Collecting from: " + subDir.getName());
+                System.out.println(now + "/" + total + ", collecting from: " + subDir.getName());
                 List<StatisticsHolder> allStats = StatisticsCollector.collectFromProject(subDir.toPath());
                 if (allStats.size() < MIN_FILES_TO_TEST) {
                     continue;
@@ -102,20 +103,24 @@ public class Main {
                     writeFileStats(writer, stats, features);
                 }
             }
+            now++;
         }
     }
 
     private static List<String> collectTypesFromFiles(File[] subDirs) {
         Set<String> types = new HashSet<>();
+        int total = subDirs.length;
+        int now = 1;
         for (File subDir : subDirs) {
             if (subDir.isDirectory()) {
-                System.out.println("Collecting types from: " + subDir.getName());
+                System.out.println(now + "/" + total + ", collecting types from: " + subDir.getName());
                 try {
                     types.addAll(StatisticsCollector.collectTypesFromProject(subDir.toPath()));
                 } catch (Exception e) {
                     System.out.println("Error occurred during input/output");
                 }
             }
+            now++;
         }
         return new ArrayList<>(types);
     }
