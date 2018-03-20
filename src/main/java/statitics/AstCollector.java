@@ -16,8 +16,8 @@ public class AstCollector {
 
     /** Adds ast of method in xml format to the {@link StatisticsHolder}. */
     public static void getAst(MethodDeclaration method, StatisticsHolder stats) {
-        String xmlString = new XmlPrinter(true).output(method);
-        stats.addToStringFeature(AST, method.getName() + ":\n" + addTabulationToXml(xmlString));
+//        String xmlString = new XmlPrinter(true).output(method);
+//        stats.addToStringFeature(AST, method.getName() + ":\n" + addTabulationToXml(xmlString));
     }
 
     private static String addTabulationToXml(String xmlString) {
