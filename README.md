@@ -26,6 +26,9 @@ Results can be saved in .csv format.
 * Layout features:
     * Punctuation before '{' brace
     * Tabs or spaces in the beginning of lines
-
+* Ast-based:
+    * Maximal depth
+    * Average depth of vertices by type
+    * TF of vertices by type
 
      
